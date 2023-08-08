@@ -17,10 +17,10 @@
         <el-input v-model.number="form.uid" :disabled="true" required />
       </el-form-item>
       <el-form-item label="Exp">
-        <el-input v-model.number="form.exp" type="number" />
+        <el-input v-model.number="form.exp" type="number" placeholder="等级经验只需修改任意一项" />
       </el-form-item>
       <el-form-item label="Level">
-        <el-input v-model.number="form.level" type="number" />
+        <el-input v-model.number="form.level" type="number" placeholder="等级经验只需修改任意一项" />
       </el-form-item>
       <el-form-item label="Coin">
         <el-input v-model.number="form.coin" type="number" />
