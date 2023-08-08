@@ -98,7 +98,20 @@ export const constantRoutes = [
         path: 'index',
         name: 'Passport',
         component: () => import('@/views/passport/index'),
-        meta: { title: 'Passport', icon: 'form' }
+        meta: { title: '账号表', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/player',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Player',
+        component: () => import('@/views/player/index'),
+        meta: { title: '用户表', icon: 'form' }
       }
     ]
   },

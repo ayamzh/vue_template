@@ -10,6 +10,7 @@
         <el-input
           v-model="formSearch.name"
           placeholder="please input passport"
+          @change="onSearch"
         />
       </el-form-item>
       <el-form-item>
@@ -23,7 +24,7 @@
     <br>
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="Passport Name">
-        <el-input v-model="form.name" :disabled="true" />
+        <el-input v-model="form.name" :disabled="true" required />
       </el-form-item>
       <el-form-item label="Player ID">
         <el-input v-model="form.id" :disabled="true" />
@@ -49,7 +50,7 @@
 
 <script>
 import moment from 'moment'
-import { editPassport, findByPassport } from '@/api/passport'
+import { editPassport, getPassport } from '@/api/passport'
 export default {
   data() {
     return {
@@ -91,7 +92,7 @@ export default {
     },
     onSearch() {
       this.searchLoading = true
-      findByPassport(this.formSearch.name)
+      getPassport(this.formSearch.name)
         .then((response) => {
           this.form.id = response.data.id
           this.form.name = response.data.name

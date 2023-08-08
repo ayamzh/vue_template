@@ -1,18 +1,18 @@
 import request from '@/utils/request'
 
-export function getPassport(name) {
+export function getPlayer(name) {
   return request({
-    url: '/passport/index',
+    url: '/player/index',
     method: 'post',
     data: { name }
   })
 }
 
-export function editPassport(passport) {
+export function editPlayer(player) {
   return request({
-    url: '/passport/edit',
+    url: '/player/edit',
     method: 'post',
-    data: passport
+    data: player
   })
 }
 
