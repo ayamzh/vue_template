@@ -117,6 +117,22 @@ export const constantRoutes = [
   },
 
   {
+    path: '/reward',
+    component: Layout,
+    redirect: '/reward/send-simple',
+    name: 'Reward',
+    meta: { title: '奖励发放', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'send-simple',
+        name: 'send-simple',
+        component: () => import('@/views/reward/send-simple'),
+        meta: { title: '简单发放', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
@@ -176,12 +192,14 @@ export const constantRoutes = [
   },
 
   {
-    path: 'external-link',
+    path: 'External-Link',
     component: Layout,
+    name: 'External-Link',
+    meta: { title: '外链', icon: 'nested' },
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'http://kachingcasino.pmt.centurygame.io/pmt#/pmconf/conf_builder',
+        meta: { title: 'PMT', icon: 'link' }
       }
     ]
   },

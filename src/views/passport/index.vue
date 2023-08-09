@@ -103,12 +103,6 @@ export default {
         .catch(() => {
           this.searchLoading = false
         })
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
     }
   }
 }
