@@ -4,7 +4,7 @@
       ref="formSearch"
       :inline="true"
       :model="formSearch"
-      label-width="120px"
+      label-width="150px"
     >
       <el-form-item label="查询账号">
         <el-input
@@ -22,14 +22,14 @@
       </el-form-item>
     </el-form>
     <br>
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Passport Name">
+    <el-form ref="form" :model="form" label-width="150px">
+      <el-form-item label="FP账号">
         <el-input v-model="form.name" :disabled="true" required />
       </el-form-item>
-      <el-form-item label="Player ID">
+      <el-form-item label="Uid">
         <el-input v-model="form.id" :disabled="true" />
       </el-form-item>
-      <el-form-item label="Regist Time">
+      <el-form-item label="注册时间">
         <el-date-picker
           v-model="form.registTime"
           type="datetime"

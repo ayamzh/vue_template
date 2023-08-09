@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="formSearch" :inline="true" :model="formSearch" label-width="120px">
+    <el-form ref="formSearch" :inline="true" :model="formSearch" label-width="150px">
       <el-form-item label="查询账号">
         <el-input v-model="formSearch.name" placeholder="please input passport" @change="onSearch" />
       </el-form-item>
@@ -9,30 +9,33 @@
       </el-form-item>
     </el-form>
     <br>
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Funplus ID">
+    <el-form ref="form" :model="form" label-width="150px">
+      <el-form-item label="FP账号">
         <el-input v-model="form.fpID" :disabled="true" />
       </el-form-item>
       <el-form-item label="Uid">
         <el-input v-model.number="form.uid" :disabled="true" required />
       </el-form-item>
-      <el-form-item label="Exp">
+      <el-form-item label="经验值">
         <el-input v-model.number="form.exp" type="number" placeholder="等级经验只需修改任意一项" />
       </el-form-item>
-      <el-form-item label="Level">
+      <el-form-item label="等级">
         <el-input v-model.number="form.level" type="number" placeholder="等级经验只需修改任意一项" />
       </el-form-item>
-      <el-form-item label="Coin">
+      <el-form-item label="金币">
         <el-input v-model.number="form.coin" type="number" />
       </el-form-item>
-      <el-form-item label="Gem">
+      <el-form-item label="钻石">
         <el-input v-model.number="form.gem" type="number" />
       </el-form-item>
-      <el-form-item label="Login Count">
+      <el-form-item label="累计登录次数">
         <el-input v-model.number="form.loginCount" type="number" />
       </el-form-item>
-      <el-form-item label="Login Time">
+      <el-form-item label="最近一次登录时间">
         <el-date-picker v-model="form.loginTime" type="datetime" placeholder="Pick a date" style="width: 100%" />
+      </el-form-item>
+      <el-form-item label="时间偏移量">
+        <el-input v-model.number="form.timeOffset" type="number" placeholder="单位秒" />
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
@@ -59,7 +62,8 @@ export default {
         gem: null,
         loginCount: null,
         loginTime: null,
-        loginTimestamp: null
+        loginTimestamp: null,
+        timeOffset: null
       },
       loading: false,
       searchLoading: false
