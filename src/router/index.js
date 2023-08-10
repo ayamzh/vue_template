@@ -133,6 +133,22 @@ export const constantRoutes = [
   },
 
   {
+    path: '/tools',
+    component: Layout,
+    redirect: '/tools/ride-rule',
+    name: 'Tools',
+    meta: { title: '工具集', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'ride-rule',
+        name: 'ride-rule',
+        component: () => import('@/views/tools/ride-rule'),
+        meta: { title: '规则引擎', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',

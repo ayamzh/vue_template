@@ -8,7 +8,7 @@
     >
       <el-form-item label="查询账号">
         <el-input
-          v-model="formSearch.name"
+          v-model.trim="formSearch.name"
           placeholder="please input passport"
           @change="onSearch"
         />
