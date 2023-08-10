@@ -14,6 +14,11 @@
         style="width: 80%; height: 80%; border: 1px solid #000;"
       />
     </div>
+    <div class="submit-button">
+      <el-row>
+        <el-button type="primary" :loading="loading" @click="test">测试</el-button>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -23,44 +28,13 @@ import 'codemirror/mode/clike/clike.js'
 import 'codemirror/mode/javascript/javascript.js' // 添加 JSON 模式
 import 'codemirror/addon/display/autorefresh'
 
+import { getRideConfig, testRideRule } from '@/api/tools'
+
 export default {
   data() {
     return {
-      codeSnippets: `// please in put your code
-// for example
-const a = 10
-if a === 10 {
-  console.log("a is ten")
-}
-`,
-      jsonSnippets: `{
-    "OutputRideID": 0,             // 新RideID
-    "OutputRtpLevel": 0,           // RTPLEVEL
-    "InputRideID": 0,              // 旧RideID
-    "Recommend": 0,                // 机台推荐度
-    "EntryTimes": 0,               // 进入机台次数
-    "Seq": 0,                      // 进入机台的顺序
-    "Level": 0,                    // 用户等级
-    "SpinTimes": 0,                // spin总次数
-    "TotalRtp": 0.0,               // 总赢奖倍率
-    "RegisterDay": 0,              // 注册天數
-    "LastSpinTimes": 0,            // 上一个机台SPIN总次数
-    "LastRtp": 0.0,                // 上一个机台总赢奖倍率
-    "RemainNum": 0,                // 玩家进入机台前金币总额按照上个机台最后一次下注计算当前机台可下注次数
-    "RideSegmentaion": 0,          // 用户分组
-    "ThemeID": 0,                  // 本次机台ID
-    "TodaySeq": 0,                 // 当日次序
-    "RtpLowSpinTimes": 0,          // 93rtp的spin次数
-    "RtpLowEntryTimes": 0,         // 93rtp的进入次数
-    "Coin": 0,                     // 93rtp的金币余额
-    "RechargeMoney": 0,            // 累计充值美分
-    "ThemeType": 0,                // 机台类型
-    "ABTag": "",                   // 用户abtag标签 a or b
-    "LastRideTime": {},            // 上一次进入机台时间
-    "Now": 0,                      //
-    "AvgBet": 0                    // 平均下注
-}
-`,
+      codeSnippets: '',
+      jsonSnippets: '',
       cmOptions: {
         autorefresh: true,
         tabSize: 4,
@@ -86,7 +60,39 @@ if a === 10 {
         readOnly: false,
         showCursorWhenSelecting: true,
         firstLineNumber: 1
+      },
+      loading: false
+    }
+  },
+  created() {
+    getRideConfig()
+      .then((response) => {
+        this.codeSnippets = response.data.codeSnippets
+        this.jsonSnippets = response.data.jsonSnippets
+      })
+      .catch(() => {
+        this.$message('获取基础配置失败')
+      })
+    return
+  },
+  methods: {
+    test() {
+      this.loading = true
+      if (this.codeSnippets === '') {
+        this.$message('no data')
+        this.loading = false
+        return
       }
+
+      testRideRule(this.codeSnippets, this.jsonSnippets)
+        .then((response) => {
+          this.loading = false
+          const result = '<h1>rideID = ' + response.data.rideID + '<br><br>  rtpLevel = ' + response.data.rtpLevel + '</h1>'
+          this.$alert(result, '结果', { center: true, dangerouslyUseHTMLString: true })
+        })
+        .catch(() => {
+          this.loading = false
+        })
     }
   }
 }
@@ -106,10 +112,16 @@ if a === 10 {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  height: 40vh;
   width: 100%; /* 使宽度占满整个父容器 */
   border: 1px solid #ccc;
   margin: auto; /* 居中 */
+}
+
+.submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 其他样式保持不变 */
