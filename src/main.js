@@ -14,6 +14,11 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import VueCodemirror from 'vue-codemirror'
+// import base style
+import 'codemirror/lib/codemirror.css'
+
+Vue.use(VueCodemirror)
 
 /**
  * If you don't want to use mock-server
