@@ -16,7 +16,7 @@
     </div>
     <div class="submit-button">
       <el-row>
-        <el-button type="primary" :loading="loading" @click="test">测试</el-button>
+        <el-button type="primary" :loading="loading" style="width: 150px; height: 60px;" @click="test">测试</el-button>
       </el-row>
     </div>
   </div>
@@ -40,7 +40,7 @@ export default {
         tabSize: 4,
         mode: 'text/x-c++src',
         theme: 'default',
-        line: true,
+        lineNumbers: true,
         viewportMargin: Infinity, // 处理高度自适应时搭配使用
         highlightDifferences: true,
         autofocus: true,
@@ -48,6 +48,9 @@ export default {
         smartIndent: true,
         readOnly: false, // 只读
         showCursorWhenSelecting: true,
+        // styleActiveLine: true, // 选中行高亮
+        // matchBrackets: true, // 匹配括号
+        // lineWrapping: true, // 自动换行
         firstLineNumber: 1
       },
       jsonCmOptions: {
@@ -55,7 +58,7 @@ export default {
         tabSize: 2, // 为 JSON 使用 2 个空格缩进
         mode: 'application/json', // 使用 JSON 模式
         theme: 'default',
-        line: true,
+        lineNumbers: true,
         viewportMargin: Infinity,
         readOnly: false,
         showCursorWhenSelecting: true,

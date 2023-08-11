@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <div>
+      <el-form ref="formSearch" :inline="true" :model="formSearch" label-width="150px">
+        <el-form-item label="查询账号">
+          <el-input v-model.trim="formSearch.name" placeholder="please input passport" />
+          <el-input v-model.trim="formSearch.themeID" placeholder="please input theme" />
+        </el-form-item>
+        <el-form-item>
+          <el-button :loading="searchLoading" type="primary" @click="onSearch">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -44,8 +55,8 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
-
+import { getPlayer } from '@/api/player'
+import VJsoneditor from 'v-jsoneditor'
 export default {
   filters: {
     statusFilter(status) {
@@ -59,12 +70,17 @@ export default {
   },
   data() {
     return {
+      formSearch: {
+        name: '',
+        themeID: null
+      },
       list: null,
-      listLoading: true
+      listLoading: false,
+      searchLoading: false
     }
   },
   created() {
-    this.fetchData()
+    // this.fetchData()
   },
   methods: {
     fetchData() {
@@ -73,6 +89,17 @@ export default {
         this.list = response.data.items
         this.listLoading = false
       })
+    },
+    onSearch() {
+      this.searchLoading = true
+      getPlayer(this.formSearch.name)
+        .then((response) => {
+          this.form = response.data
+          this.searchLoading = false
+        })
+        .catch(() => {
+          this.searchLoading = false
+        })
     }
   }
 }
