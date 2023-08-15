@@ -55,6 +55,28 @@ export const constantRoutes = [
     }]
   },
 
+  {
+    path: '/admin',
+    component: Layout,
+    redirect: '/admin/index',
+    name: 'Admin',
+    meta: { title: 'PMT管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: () => import('@/views/admin/index'),
+        meta: { title: '账号', icon: 'table' }
+      },
+      {
+        path: 'group',
+        name: 'Group',
+        component: () => import('@/views/admin/index'),
+        meta: { title: '用户组', icon: 'table' }
+      },
+    ]
+  },
+
   // {
   //   path: '/form',
   //   component: Layout,
@@ -90,22 +112,6 @@ export const constantRoutes = [
         name: 'Player',
         component: () => import('@/views/player/index'),
         meta: { title: '用户表', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/theme',
-    component: Layout,
-    redirect: '/theme/status',
-    name: 'Theme',
-    meta: { title: '机台', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'status',
-        name: 'Status',
-        component: () => import('@/views/themestatus/index'),
-        meta: { title: '用户机台状态', icon: 'table' }
       }
     ]
   },

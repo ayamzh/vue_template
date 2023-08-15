@@ -11,8 +11,8 @@ export function login(data) {
 export function getInfo(token) {
   return request({
     url: '/user/info',
-    method: 'get',
-    params: { token }
+    method: 'post',
+    data: { token }
   })
 }
 
@@ -22,3 +22,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function userList() {
+  return request({
+    url: '/user/list',
+    method: 'post'
+  })
+}
+
