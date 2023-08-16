@@ -30,3 +30,19 @@ export function userList() {
   })
 }
 
+export function userUpsert(userForm) {
+  return request({
+    url: '/user/upsert',
+    method: 'post',
+    data: userForm
+  })
+}
+
+export function userDelete(name) {
+  return request({
+    url: '/user/delete',
+    method: 'post',
+    data: { name }
+  })
+}
+
