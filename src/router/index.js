@@ -73,7 +73,7 @@ export const constantRoutes = [
       {
         path: 'group',
         name: 'Group',
-        component: () => import('@/views/admin/index'),
+        component: () => import('@/views/usergroup/index'),
         meta: { title: '用户组', icon: 'table' }
       }
     ]

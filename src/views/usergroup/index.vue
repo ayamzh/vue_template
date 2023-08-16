@@ -7,7 +7,7 @@
       <el-table-column prop="id" label="ID" width="200" />
       <el-table-column prop="name" label="账号" width="200" />
       <el-table-column prop="enable" label="是否可用" width="200" />
-      <el-table-column prop="role" label="角色" width="200" />
+      <el-table-column prop="userGroup" label="所属用户组" width="200" />
       <el-table-column prop="created" label="创建时间" width="200" />
       <el-table-column prop="updated" label="修改时间" width="200" />
       <el-table-column label="操作" width="200">
@@ -31,10 +31,8 @@
         <el-form-item label="账号">
           <el-input v-model="adminForm.name" :disabled="oldUser" />
         </el-form-item>
-        <el-form-item label="角色">
-          <el-select v-model="adminForm.role" class="align-left">
-            <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
+        <el-form-item label="所属用户组">
+          <el-input v-model="adminForm.userGroup" />
         </el-form-item>
         <el-form-item label="是否可用">
           <el-select v-model="adminForm.enable" class="align-left">
@@ -62,7 +60,7 @@ export default {
       adminForm: {
         id: null,
         name: null,
-        role: null,
+        userGroup: null,
         enable: null
       },
       dialogFormVisible: false,
@@ -76,42 +74,16 @@ export default {
           label: '否',
           value: false
         }
-      ],
-      roleOptions: [
-        {
-          label: '超级管理员',
-          value: 'admin'
-        },
-        {
-          label: '管理员',
-          value: 'user'
-        },
-        {
-          label: '访客',
-          value: 'visitor'
-        }
       ]
     }
   },
   computed: {
     tableDataComputed() {
       return this.tableData.map((item) => {
-        let role
-        switch (item.role) {
-          case 'admin':
-            role = '超级管理员'
-            break
-          case 'user':
-            role = '管理员'
-            break
-          default :
-            role = '访客'
-        }
         return {
           id: item.id,
           name: item.name,
-          role: role,
-          srcRole: item.role,
+          userGroup: item.userGroup,
           enable: item.enable === true ? '是' : '否',
           created: moment.unix(item.created).format('YYYY-MM-DD HH:mm:ss'),
           updated: moment.unix(item.updated).format('YYYY-MM-DD HH:mm:ss'),
@@ -137,7 +109,7 @@ export default {
       this.adminForm = {
         id: row.id,
         name: row.name,
-        role: row.srcRole,
+        userGroup: row.userGroup,
         enable: row.srcEnable
       }
       this.oldUser = true
@@ -169,7 +141,7 @@ export default {
       this.adminForm = {
         id: 0,
         name: '',
-        role: 'visitor',
+        userGroup: '',
         enable: true
       }
       this.oldUser = false
