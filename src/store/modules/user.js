@@ -1,13 +1,13 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken, setAdminID, getAdminID, removeAdminID } from '@/utils/auth'
+import { getToken, setToken, removeToken, setAdminName, getAdminName, removeAdminName } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
-    name: '',
     avatar: '',
-    adminID: getAdminID()
+    adminName: getAdminName(),
+    role: ''
   }
 }
 
@@ -20,14 +20,15 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_ADMIN: (state, adminID) => {
-    state.adminID = adminID
-  },
-  SET_NAME: (state, name) => {
-    state.name = name
+  SET_ADMIN: (state, adminName) => {
+    state.adminName = adminName
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  // 新增
+  SET_ROLE: (state, role) => {
+    state.role = role
   }
 }
 
@@ -39,10 +40,12 @@ const actions = {
       login({ username: username.trim(), password: password })
         .then((response) => {
           const { data } = response
+          // 存入state
           commit('SET_TOKEN', data.token)
-          commit('SET_ADMIN', data.adminID)
+          commit('SET_ADMIN', data.adminName)
+          // 写入coockie
           setToken(data.token)
-          setAdminID(data.adminID)
+          setAdminName(data.adminName)
           resolve()
         })
         .catch((error) => {
@@ -54,7 +57,7 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token)
+      getInfo()
         .then((response) => {
           const { data } = response
 
@@ -62,10 +65,10 @@ const actions = {
             return reject('Verification failed, please Login again.')
           }
 
-          const { name, avatar } = data
-
-          commit('SET_NAME', name)
+          const { avatar, role } = data
+          // 存入state
           commit('SET_AVATAR', avatar)
+          commit('SET_ROLE', role)
           resolve(data)
         })
         .catch((error) => {
@@ -80,9 +83,10 @@ const actions = {
       logout(state.token)
         .then(() => {
           removeToken() // must remove  token  first
-          removeAdminID()
+          removeAdminName()
           resetRouter()
           commit('RESET_STATE')
+          commit('SET_ROLE', '')
           resolve()
         })
         .catch((error) => {

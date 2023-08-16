@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken, getAdminID } from '@/utils/auth'
+import { getToken, getAdminName } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -20,7 +20,7 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers['X-Token'] = getToken()
-      config.headers['X-Id'] = getAdminID()
+      config.headers['X-Id'] = getAdminName()
     }
     return config
   },
