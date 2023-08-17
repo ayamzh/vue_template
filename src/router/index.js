@@ -55,26 +55,28 @@ export const constantRoutes = [
         meta: { title: 'Dashboard', icon: 'dashboard' }
       }
     ]
-  },
+  }
+]
 
+export const asyncRoutes = [
   {
     path: '/admin',
     component: Layout,
     redirect: '/admin/index',
     name: 'Admin',
-    meta: { title: 'PMT管理', icon: 'el-icon-s-help' },
+    meta: { title: 'PMT管理', icon: 'el-icon-s-help', roles: ['admin'] },
     children: [
       {
         path: 'index',
         name: 'Index',
         component: () => import('@/views/admin/index'),
-        meta: { title: '账号', icon: 'table' }
+        meta: { title: '账号', icon: 'table', roles: ['admin'] }
       },
       {
         path: 'group',
         name: 'Group',
         component: () => import('@/views/usergroup/index'),
-        meta: { title: '用户组', icon: 'table' }
+        meta: { title: '用户组', icon: 'table', roles: ['admin'] }
       }
     ]
   },

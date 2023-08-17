@@ -26,15 +26,47 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name
+      const hasGetUserInfo = store.getters.role
       if (hasGetUserInfo) {
+        // 如果配置了权限 对比角色是否有访问权限
+        // if (to.meta.roles) {
+        //   console.log(to.meta.roles)
+        //   console.log(store.getters.role)
+        //   for (const role of to.meta.roles) {
+        //     if (hasGetUserInfo === role) {
+        //       next()
+        //       return
+        //     }
+        //   }
+        //   // remove token and go to login page to re-login
+        //   await store.dispatch('user/resetToken')
+        //   Message.error('无访问权限')
+        //   next(`/login?redirect=${to.path}`)
+        //   NProgress.done()
+        // }
         next()
       } else {
         try {
           // get user info
-          await store.dispatch('user/getInfo')
+          // await store.dispatch('user/getInfo')
 
-          next()
+          // get user info
+          // await store.dispatch('user/getInfo')
+          // 第一步
+          const { role } = await store.dispatch('user/getInfo')
+
+          // // 获取通过权限的路由  第二步
+          const accessRoutes = await store.dispatch('permission/generateRoutes', role)
+
+          // // 更新路由 第三步
+          router.options.routes = store.getters.permission_routes
+
+          // // 动态添加可访问路由
+          router.addRoutes(accessRoutes)
+          // console.log(store)
+          next({ ...to, replace: true })
+
+          // next()
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
