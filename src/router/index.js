@@ -152,6 +152,22 @@ export const asyncRoutes = [
     ]
   },
 
+  {
+    path: '/setting',
+    component: Layout,
+    redirect: '/setting/password',
+    name: 'Setting',
+    meta: { title: '设置', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'password',
+        name: 'password',
+        component: () => import('@/views/password/index'),
+        meta: { title: '修改密码', icon: 'form' }
+      }
+    ]
+  },
+
   // {
   //   path: '/nested',
   //   component: Layout,

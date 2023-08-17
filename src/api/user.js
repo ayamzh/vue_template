@@ -45,3 +45,18 @@ export function userDelete(name) {
   })
 }
 
+export function changePassword(data) {
+  return request({
+    url: '/user/password/change',
+    method: 'post',
+    data: data
+  })
+}
+
+export function checkPassword(password) {
+  return request({
+    url: '/user/password/check',
+    method: 'post',
+    data: { password }
+  })
+}
