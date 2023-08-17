@@ -90,7 +90,7 @@ export default {
     onSubmit() {
       this.loading = true
 
-      let aa = this.$refs.form.validate((valid) => {
+      this.$refs.form.validate((valid) => {
         if (valid) {
           return true
         } else {
