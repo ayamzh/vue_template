@@ -130,7 +130,11 @@ export default {
           this.tableData = response.data.list
         })
         .catch(() => {
-          this.$message('获取用户列表失败')
+          this.$message({
+            showClose: true,
+            message: '获取用户列表失败',
+            type: 'warning'
+          })
         })
     },
     handleEdit(row) {
@@ -146,23 +150,39 @@ export default {
     handleDelete(name) {
       userDelete(name)
         .then((response) => {
-          this.$message('删除成功')
+          this.$message({
+            showClose: true,
+            message: '删除成功',
+            type: 'success'
+          })
           this.fetchAll()
         })
         .catch(() => {
-          this.$message('删除失败')
+          this.$message({
+            showClose: true,
+            message: '删除失败',
+            type: 'warning'
+          })
         })
     },
     submitUser() {
       userUpsert(this.adminForm)
         .then(() => {
           console.log(this.$router)
-          this.$message('修改成功')
+          this.$message({
+            showClose: true,
+            message: '修改成功',
+            type: 'success'
+          })
           this.dialogFormVisible = false
           this.fetchAll()
         })
         .catch(() => {
-          this.$message('修改失败')
+          this.$message({
+            showClose: true,
+            message: '修改失败',
+            type: 'warning'
+          })
         })
     },
     createUser() {

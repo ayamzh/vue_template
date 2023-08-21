@@ -65,7 +65,11 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$message('submit!')
+      this.$message({
+        showClose: true,
+        message: 'submit!',
+        type: 'success'
+      })
     },
     onCancel() {
       this.$message({

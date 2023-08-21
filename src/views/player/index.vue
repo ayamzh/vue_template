@@ -87,7 +87,11 @@ export default {
     onSubmit() {
       this.loading = true
       if (this.form.name === '') {
-        this.$message('no data')
+        this.$message({
+          showClose: true,
+          message: '需要填写用户名',
+          type: 'warning'
+        })
         this.loading = false
         return
       }
@@ -101,7 +105,11 @@ export default {
           this.localTimeOffset = moment().unix() - response.data.systemTime
           this.form = response.data
           this.loading = false
-          this.$message('修改成功')
+          this.$message({
+            showClose: true,
+            message: '修改成功',
+            type: 'success'
+          })
         })
         .catch(() => {
           this.loading = false

@@ -76,7 +76,11 @@ export default {
     onSubmit() {
       this.loading = true
       if (this.form.name === '') {
-        this.$message('no data')
+        this.$message({
+          showClose: true,
+          message: '请输入用户名',
+          type: 'warning'
+        })
         this.loading = false
         return
       }
@@ -84,7 +88,11 @@ export default {
       editPassport(this.form)
         .then((response) => {
           this.loading = false
-          this.$message('修改成功')
+          this.$message({
+            showClose: true,
+            message: '修改成功息',
+            type: 'success'
+          })
         })
         .catch(() => {
           this.loading = false

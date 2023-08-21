@@ -74,7 +74,11 @@ export default {
         this.jsonSnippets = response.data.jsonSnippets
       })
       .catch(() => {
-        this.$message('获取基础配置失败')
+        this.$message({
+          showClose: true,
+          message: '获取基础配置失败',
+          type: 'warning'
+        })
       })
     return
   },
@@ -82,7 +86,11 @@ export default {
     test() {
       this.loading = true
       if (this.codeSnippets === '') {
-        this.$message('no data')
+        this.$message({
+          showClose: true,
+          message: '规则不能为空',
+          type: 'warning'
+        })
         this.loading = false
         return
       }

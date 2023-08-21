@@ -101,7 +101,11 @@ export default {
       changePassword(this.form)
         .then((response) => {
           this.loading = false
-          this.$message('修改成功')
+          this.$message({
+            showClose: true,
+            message: '修改成功',
+            type: 'success'
+          })
         })
         .catch(() => {
           this.loading = false

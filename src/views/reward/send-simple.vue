@@ -60,7 +60,11 @@ export default {
           }
         })
         .catch(() => {
-          this.$message('获取奖励子类型列表失败')
+          this.$message({
+            showClose: true,
+            message: '获取奖励子类型列表失败',
+            type: 'warning'
+          })
         })
     }
   },
@@ -70,7 +74,11 @@ export default {
         this.mainTypeOptions = response.data.options
       })
       .catch(() => {
-        this.$message('获取奖励类型列表失败')
+        this.$message({
+          showClose: true,
+          message: '获取奖励类型列表失败',
+          type: 'warning'
+        })
       })
     return
   },
@@ -78,7 +86,11 @@ export default {
     onSubmit() {
       this.loading = true
       if (this.form.uids === '') {
-        this.$message('no data')
+        this.$message({
+          showClose: true,
+          message: '需要填写用户列表',
+          type: 'warning'
+        })
         this.loading = false
         return
       }
@@ -86,7 +98,11 @@ export default {
       sendReward(this.form)
         .then((response) => {
           this.loading = false
-          this.$message('发放成功')
+          this.$message({
+            showClose: true,
+            message: '发放成功功',
+            type: 'success'
+          })
         })
         .catch(() => {
           this.loading = false

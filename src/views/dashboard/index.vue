@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ adminName }}</div>
+    <div class="dashboard-text">用户: {{ adminName }}</div>
+    <div class="dashboard-text">权限: {{ role }}</div>
   </div>
 </template>
 
@@ -11,7 +12,8 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
-      'adminName'
+      'adminName',
+      'role'
     ])
   }
 }
