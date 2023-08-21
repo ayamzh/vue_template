@@ -102,7 +102,7 @@ export const asyncRoutes = [
         path: 'index',
         name: 'Passport',
         component: () => import('@/views/passport/index'),
-        meta: { title: '账号表', icon: 'form' }
+        meta: { title: '账号表', icon: 'el-icon-user-solid' }
       }
     ]
   },
@@ -115,7 +115,7 @@ export const asyncRoutes = [
         path: 'index',
         name: 'Player',
         component: () => import('@/views/player/index'),
-        meta: { title: '用户表', icon: 'form' }
+        meta: { title: '用户表', icon: 'el-icon-user' }
       }
     ]
   },
@@ -125,13 +125,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/reward/send-simple',
     name: 'Reward',
-    meta: { title: '奖励发放', icon: 'el-icon-s-help' },
+    meta: { title: '奖励发放', icon: 'el-icon-s-promotion' },
     children: [
       {
         path: 'send-simple',
         name: 'send-simple',
         component: () => import('@/views/reward/send-simple'),
-        meta: { title: '简单发放', icon: 'form' }
+        meta: { title: '简单发放', icon: 'el-icon-s-promotion' }
       }
     ]
   },
@@ -157,13 +157,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/setting/password',
     name: 'Setting',
-    meta: { title: '设置', icon: 'el-icon-s-help' },
+    meta: { title: '设置', icon: 'el-icon-s-tools' },
     children: [
       {
         path: 'password',
         name: 'password',
         component: () => import('@/views/password/index'),
-        meta: { title: '修改密码', icon: 'form' }
+        meta: { title: '修改密码', icon: 'el-icon-s-tools' }
       }
     ]
   },
