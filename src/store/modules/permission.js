@@ -38,7 +38,6 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes) // 将过滤的路由和国定的路由存起来
-    console.log(state.routes)
   }
 }
 

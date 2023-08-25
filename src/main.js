@@ -17,8 +17,10 @@ import '@/permission' // permission control
 import VueCodemirror from 'vue-codemirror'
 // import base style
 import 'codemirror/lib/codemirror.css'
+import VueSSE from 'vue-sse'
 
 Vue.use(VueCodemirror)
+Vue.use(VueSSE)
 
 /**
  * If you don't want to use mock-server

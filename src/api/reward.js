@@ -23,3 +23,21 @@ export function sendReward(reward) {
   })
 }
 
+export function sendRewardBatch(formData) {
+  return request({
+    url: '/reward/batch', // 修改为实际上传文件的接口
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: formData
+  })
+}
+
+export function getRecords() {
+  return request({
+    url: '/reward/records',
+    method: 'post'
+  })
+}
+

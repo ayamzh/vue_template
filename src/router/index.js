@@ -132,6 +132,12 @@ export const asyncRoutes = [
         name: 'send-simple',
         component: () => import('@/views/reward/send-simple'),
         meta: { title: '简单发放', icon: 'el-icon-s-promotion' }
+      },
+      {
+        path: 'send-batch',
+        name: 'send-batch',
+        component: () => import('@/views/reward/send-batch'),
+        meta: { title: '批量发放', icon: 'el-icon-s-promotion' }
       }
     ]
   },
