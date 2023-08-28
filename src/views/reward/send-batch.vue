@@ -156,9 +156,10 @@ export default {
       return false
     },
     initSSE() {
-      this.cli = this.$sse.create(process.env.VUE_APP_BASE_API +
-      `/sse/event?type=reward&fileID=${this.fileID}`, {
-        format: 'json',
+      this.cli = this.$sse.create({
+        url: process.env.VUE_APP_BASE_API +
+      `/sse/event?type=reward&fileID=${this.fileID}`,
+        // format: 'json',
         polyfill: true,
         polyfillOptions: {
           headers: {
@@ -166,8 +167,8 @@ export default {
             'X-Token': getToken()
           }
         },
-        forcePolyfill: true,
-        withCredentials: true
+        forcePolyfill: true
+        // withCredentials: true
       })
 
       this.cli.on('message', (msg) => {
