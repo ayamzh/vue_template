@@ -21,7 +21,7 @@
         >查询</el-button>
       </el-form-item>
     </el-form>
-    <br>
+    <el-divider />
     <el-form ref="form" :model="form" label-width="150px">
       <el-form-item label="FP账号">
         <el-input v-model="form.name" :disabled="true" required />

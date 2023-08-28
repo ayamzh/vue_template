@@ -8,7 +8,7 @@
         <el-button :loading="searchLoading" type="primary" @click="onSearch">查询</el-button>
       </el-form-item>
     </el-form>
-    <br>
+    <el-divider />
     <el-form ref="form" :model="form" label-width="150px">
       <el-form-item label="FP账号">
         <el-input v-model="form.fpID" :disabled="true" />
