@@ -43,14 +43,14 @@
     <el-row>
       <el-col>
         <el-table :data="records" border style="width: 100%">
-          <el-table-column prop="id" label="ID" width="100" />
+          <el-table-column prop="id" label="ID" width="150" />
           <el-table-column prop="name" label="文件名" />
-          <el-table-column prop="adminName" label="操作者" />
-          <el-table-column prop="isFinished" label="状态" width="100" />
-          <el-table-column prop="errorNum" label="失败数" width="100" />
-          <el-table-column prop="total" label="总数" width="100" />
-          <el-table-column prop="created" label="创建时间" />
-          <el-table-column prop="updated" label="修改时间" />
+          <el-table-column prop="adminName" label="操作者" width="150" />
+          <el-table-column prop="isFinished" label="状态" width="150" />
+          <el-table-column prop="errorNum" label="失败数" width="150" />
+          <el-table-column prop="total" label="总数" width="150" />
+          <el-table-column prop="created" label="创建时间" width="200" />
+          <el-table-column prop="updated" label="修改时间" width="200" />
           <el-table-column label="下载" width="80">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-download" circle @click="downloadFile(scope.row)" />
