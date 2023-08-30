@@ -62,9 +62,8 @@ export const asyncRoutes = [
   {
     path: '/admin',
     component: Layout,
-    redirect: '/admin/index',
     name: 'Admin',
-    meta: { title: 'PMT管理', icon: 'el-icon-s-help', roles: ['admin'] },
+    meta: { title: '系统管理', icon: 'el-icon-s-help', roles: ['admin'] },
     children: [
       {
         path: 'index',
@@ -73,10 +72,10 @@ export const asyncRoutes = [
         meta: { title: '账号', icon: 'table', roles: ['admin'] }
       },
       {
-        path: 'group',
-        name: 'Group',
-        component: () => import('@/views/usergroup/index'),
-        meta: { title: '用户组', icon: 'table', roles: ['admin'] }
+        path: 'oplog',
+        name: 'Oplog',
+        component: () => import('@/views/oplog/index'),
+        meta: { title: '操作日志', icon: 'table' }
       }
     ]
   },

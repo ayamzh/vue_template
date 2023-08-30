@@ -19,8 +19,12 @@ import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import VueSSE from 'vue-sse'
 
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
 Vue.use(VueCodemirror)
 Vue.use(VueSSE)
+Vue.use(VXETable)
 
 /**
  * If you don't want to use mock-server

@@ -60,3 +60,11 @@ export function checkPassword(password) {
     data: { password }
   })
 }
+
+export function getOplogs(formData) {
+  return request({
+    url: '/user/oplogs',
+    method: 'post',
+    data: formData
+  })
+}
