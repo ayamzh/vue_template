@@ -153,6 +153,12 @@ export const asyncRoutes = [
         name: 'ride-rule',
         component: () => import('@/views/tools/ride-rule'),
         meta: { title: '规则引擎', icon: 'form' }
+      },
+      {
+        path: 'domainCheck',
+        name: 'domainCheck',
+        component: () => import('@/views/tools/domain-check'),
+        meta: { title: '证书检查', icon: 'form' }
       }
     ]
   },

@@ -16,3 +16,10 @@ export function testRideRule(rule, param) {
   })
 }
 
+export function domainCheck() {
+  return request({
+    url: '/tools/domain/check',
+    method: 'post'
+  })
+}
+
