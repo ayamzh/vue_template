@@ -159,6 +159,12 @@ export const asyncRoutes = [
         name: 'domainCheck',
         component: () => import('@/views/tools/domain-check'),
         meta: { title: '证书检查', icon: 'form' }
+      },
+      {
+        path: 'rtpSimulator',
+        name: 'rtpSimulator',
+        component: () => import('@/views/tools/rtp-simulator'),
+        meta: { title: 'RTP模拟器', icon: 'form' }
       }
     ]
   },

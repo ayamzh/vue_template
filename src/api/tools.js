@@ -23,3 +23,25 @@ export function domainCheck() {
   })
 }
 
+export function rtpTemplates() {
+  return request({
+    url: '/tools/rtp/templates',
+    method: 'post'
+  })
+}
+
+export function rtpSimulator(form) {
+  return request({
+    url: '/tools/rtp/simulator',
+    method: 'post',
+    data: form
+  })
+}
+
+export function rtpReports(formData) {
+  return request({
+    url: '/tools/rtp/reports',
+    method: 'post',
+    data: formData
+  })
+}

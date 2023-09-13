@@ -115,3 +115,18 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+export function numberToPaddedString(num, length) {
+  // 将数字转换为字符串
+  let str = num.toString()
+
+  // 计算需要添加的空格数
+  const paddingLength = length - str.length
+
+  // 如果需要添加空格，则在字符串前面添加空格
+  if (paddingLength > 0) {
+    str = ' '.repeat(paddingLength) + str
+  }
+
+  return str
+}
