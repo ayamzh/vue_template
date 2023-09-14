@@ -18,10 +18,13 @@
         <el-input v-model.number="form.value" type="number" />
       </el-form-item>
       <el-form-item>
+        <el-button :loading="loading" type="primary" @click="onSubmit">开始发奖</el-button>
+      </el-form-item>
+      <!-- <el-form-item>
         <el-popconfirm title="确定发送奖励么" @onConfirm="onSubmit">
           <el-button slot="reference" :loading="loading" type="primary">提交</el-button>
         </el-popconfirm>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
   </div>
 
