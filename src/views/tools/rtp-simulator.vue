@@ -1,5 +1,8 @@
 <template>
   <div class="table-container">
+
+    <div id="mazheng" />
+
     <el-form ref="form" :model="form" label-width="150px">
       <el-form-item label="模拟template">
         <el-select v-model.number="form.simID" placeholder="please select type" type="number">
@@ -33,11 +36,18 @@
 
     <el-row>
       <el-col :span="24">
-        <el-collapse accordion>
-          <el-collapse-item v-for="item in simList" :key="item.id">
+        <el-collapse
+          v-model="activeNames"
+          v-infinite-scroll="load"
+          infinite-scroll-disabled="disabled"
+          accordion
+          style="overflow:auto"
+          @change="handleChange"
+        >
+          <el-collapse-item v-for="item in simList" :key="item.id" :name="item.id">
             <template slot="title">
               <div class="title-container">
-                <span><b>ID：</b>{{ item.id.replace(" ", "&nbsp;") }}</span>
+                <span><b>ID：</b>{{ item.id }}</span>
                 <span><b>模板：</b>{{ item.simID }}</span>
                 <span><b>人数：</b>{{ item.times }}</span>
                 <span><b>Spin次数：</b>{{ item.spinTimes }}</span>
@@ -101,12 +111,12 @@
                 {{ item.result.RealMaxSpinTimes }}
               </el-descriptions-item>
             </el-descriptions>
-          </el-collapse-item>
-          <el-collapse-item title="反馈 Feedback">
-            <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-            <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
+            <el-divider />
+            <div :id="'bankruptcyPercent' + item.id" :ref="'bankruptcyPercent' + item.id" />
           </el-collapse-item>
         </el-collapse>
+        <p v-if="loading" style="text-align: center">加载中...</p>
+        <p v-if="noMore" style="text-align: center">没有更多了</p>
       </el-col>
     </el-row>
   </div>
@@ -115,9 +125,8 @@
 <script>
 import { rtpTemplates, rtpSimulator, rtpReports } from '@/api/tools'
 import { getToken, getAdminName } from '@/utils/auth'
-import { numberToPaddedString } from '@/utils/index.js'
 import moment from 'moment'
-// import echarts from 'echarts'
+import * as echarts from 'echarts'
 export default {
   data() {
     return {
@@ -137,17 +146,33 @@ export default {
       percentage: 0,
       size: null,
       // 列表页用到的
+      activeNames: '',
       simList: [],
-      simTotal: 0 // 总数
+      curPage: 0,
+      pageSize: 10,
+      totalPage: 0,
+      listLoading: false,
+      // 打开的模拟图表
+      openItem: 0,
+      chartList: []
     }
   },
   computed: {
     noMore() {
-      return this.count >= 20
+      return this.curPage > 0 && this.curPage >= this.totalPage
     },
     disabled() {
-      return this.loading || this.noMore
+      return this.listLoading || this.noMore
     }
+  },
+  watch: {
+    reportID: function(newVal, oldVal) {
+      if (newVal > 0 && newVal !== oldVal) {
+        this.initSSE()
+      }
+    }
+  },
+  mounted() {
   },
   created() {
     rtpTemplates()
@@ -161,51 +186,8 @@ export default {
           type: 'warning'
         })
       })
-    rtpReports()
-      .then((response) => {
-        console.log(response.data)
-        this.simTotal = response.data.totalResult
-        this.simList = response.data.list.map((item) => {
-          let status, color
-          switch (item.status) {
-            case 0:
-              status = '创建'
-              color = 'black'
-              break
-            case 1:
-              status = '成功'
-              color = 'green'
-              break
-            case 2:
-              status = '异常'
-              color = 'red'
-              break
-          }
 
-          console.log(item.result)
-          return {
-            id: numberToPaddedString(item.id, 10),
-            simID: numberToPaddedString(item.simID, 10),
-            times: numberToPaddedString(item.times, 10),
-            spinTimes: numberToPaddedString(item.spinTimes, 10),
-            numProcess: numberToPaddedString(item.numProcess, 2),
-            adminName: item.adminName,
-            status: status,
-            color: color,
-            cost: this.changeSecondsToHours(item.updated - item.created),
-            created: moment.unix(item.created).format('YYYY-MM-DD HH:mm:ss'),
-            updated: moment.unix(item.updated).format('YYYY-MM-DD HH:mm:ss'),
-            result: item.result
-          }
-        })
-      })
-      .catch(() => {
-        this.$message({
-          showClose: true,
-          message: '获取历史记录失败',
-          type: 'warning'
-        })
-      })
+    this.fetchAll(0)
 
     return
   },
@@ -213,8 +195,79 @@ export default {
     this.close()
   },
   methods: {
+    // 获取列表数据
+    fetchAll(page) {
+      this.listLoading = true
+      // 页数没变化不重复拉取
+      if (page > 0 && this.curPage === page) {
+        this.listLoading = false
+        return
+      }
+      // 超过上限不能在拉取
+      if (page > this.totalPage) {
+        this.listLoading = false
+        return
+      }
+
+      rtpReports(page, this.pageSize)
+        .then((response) => {
+          this.reportID = response.data.reportID
+          this.curPage = page > 0 ? page : 1
+          this.totalPage = Math.ceil(response.data.totalResult / this.pageSize)
+          console.log(response.data.totalResult)
+          const tmpList = response.data.list.map((item) => {
+            let status, color
+            switch (item.status) {
+              case 0:
+                status = '创建'
+                color = 'black'
+                break
+              case 1:
+                status = '成功'
+                color = 'green'
+                break
+              case 2:
+                status = '异常'
+                color = 'red'
+                break
+            }
+
+            console.log(item.result)
+            return {
+              id: item.id,
+              simID: item.simID,
+              times: item.times,
+              spinTimes: item.spinTimes,
+              numProcess: item.numProcess,
+              adminName: item.adminName,
+              status: status,
+              color: color,
+              cost: this.changeSecondsToHours(item.updated - item.created),
+              created: moment.unix(item.created).format('YYYY-MM-DD HH:mm:ss'),
+              updated: moment.unix(item.updated).format('YYYY-MM-DD HH:mm:ss'),
+              result: item.result
+            }
+          })
+
+          // 拉取第一页重置
+          if (this.curPage === 1) {
+            this.simList = tmpList
+          } else {
+            this.simList.push(...tmpList)
+          }
+        })
+        .catch(() => {
+          this.$message({
+            showClose: true,
+            message: '获取历史记录失败',
+            type: 'warning'
+          })
+        })
+
+      this.listLoading = false
+    },
+    // 开始模拟
     onSubmit() {
-      console.log('shishi')
       this.reportID = 0
       this.loading = true
       if (this.form.simID <= 0 || this.form === null) {
@@ -250,12 +303,12 @@ export default {
           this.showProcess = true
           this.reportID = response.data.reportID
           this.percentage = 0
-          this.initSSE()
         })
         .catch(() => {
           this.loading = false
         })
     },
+    // -------------sse相关
     initSSE() {
       this.cli = this.$sse.create({
         url: process.env.VUE_APP_BASE_API +
@@ -277,12 +330,7 @@ export default {
         const obj = JSON.parse(msg)
         this.percentage = Math.ceil(obj.done * 100 / obj.total)
         if (obj.total === obj.done) {
-          this.$message({
-            showClose: true,
-            message: '处理完成',
-            type: 'success'
-          })
-          // this.fetchAll()
+          this.fetchAll(0)
           this.close()
         }
       })
@@ -292,6 +340,8 @@ export default {
         })
         .on('finish', (data) => {
           console.log('finish:', data)
+          this.percentage = 100
+          this.fetchAll(0)
           this.close()
         })
         .connect()
@@ -307,6 +357,7 @@ export default {
         this.loading = false
       }
     },
+    // ----------------通用方法
     changeSecondsToHours(value) {
       if (value > 86400) {
         return '大于1天'
@@ -328,6 +379,89 @@ export default {
       if (seconds > 0) {
         return obj.format('ss秒')
       }
+    },
+    // -----------------------图表相关
+    load() {
+      if (this.curPage >= this.totalPage) {
+        return
+      }
+      this.fetchAll(this.curPage + 1)
+    },
+    // 下拉开关
+    handleChange(val) {
+      if (val !== this.openItem) {
+        for (const obj of this.chartList) {
+          obj.dispose()
+        }
+        this.chartList = []
+      }
+
+      this.openItem = val
+      let report = null
+
+      // 找寻目标对象
+      if (val > 0) {
+        this.simList.forEach((obj) => {
+          if (obj.id === val) {
+            report = obj
+            return
+          }
+        })
+      }
+
+      if (report === null) {
+        return
+      }
+
+      if (report.result.BankruptcyPercent !== null && report.result.BankruptcyPercent.length > 0) {
+        this.bankruptcyPercent(report.id, report.result.BankruptcyPercent)
+      }
+    },
+    // [
+    //     {
+    //         "MinLevel": 14,
+    //         "MaxLevel": 14,
+    //         "Percent": 0.25,
+    //         "PlayerNum": 1
+    //     }
+    // ]
+    bankruptcyPercent(reportID, data) {
+      const divDom = document.getElementById('bankruptcyPercent' + reportID)
+
+      const nameArray = data.map((obj) => {
+        if (obj.MinLevel === obj.MaxLevel) {
+          return obj.MinLevel
+        }
+        return obj.MinLevel + '-' + obj.MaxLevel
+      })
+
+      const valueArray = data.map(obj => obj.Percent * 100)
+
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(divDom, null, {
+        width: 600,
+        height: 400
+      })
+      // 绘制图表
+      myChart.setOption({
+        title: {
+          text: '破产等级分布'
+        },
+        tooltip: {},
+        xAxis: {
+          data: nameArray
+        },
+        yAxis: {},
+        series: [
+          {
+            name: '占比',
+            type: 'bar',
+            data: valueArray
+          }
+        ]
+      })
+      this.chartList.push(myChart)
+      // end
     }
   }
 }

@@ -21,9 +21,7 @@ import VueSSE from 'vue-sse'
 
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
-import echarts from 'echarts'
 
-Vue.use(echarts)
 Vue.use(VueCodemirror)
 Vue.use(VueSSE)
 Vue.use(VXETable)

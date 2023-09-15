@@ -38,10 +38,10 @@ export function rtpSimulator(form) {
   })
 }
 
-export function rtpReports(formData) {
+export function rtpReports(curPage, perPage) {
   return request({
     url: '/tools/rtp/reports',
     method: 'post',
-    data: formData
+    data: { currentPage: curPage, pageSize: perPage }
   })
 }
