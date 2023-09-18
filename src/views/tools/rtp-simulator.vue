@@ -183,6 +183,8 @@ export default {
     reportID: function(newVal, oldVal) {
       if (newVal > 0 && newVal !== oldVal) {
         this.initSSE()
+        this.showProcess = true
+        this.loading = true
       }
     }
   },
@@ -299,8 +301,16 @@ export default {
     },
     // 开始模拟
     onSubmit() {
-      this.reportID = 0
-      this.loading = true
+      if (this.reportID > 0) {
+        this.$message({
+          showClose: true,
+          message: '有进行中的任务',
+          type: 'warning'
+        })
+        this.loading = false
+        return
+      }
+
       if (this.form.simID <= 0 || this.form === null) {
         this.$message({
           showClose: true,
