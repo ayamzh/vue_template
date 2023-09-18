@@ -16,7 +16,7 @@
         <el-input v-model.number="form.maxSpinTimes" type="number" />
       </el-form-item>
       <el-form-item label="使用服务器CPU数量">
-        <el-input v-model.number="form.numProcess" type="number" />
+        <el-input v-model.number="form.numProcess" :placeholder="cpuPlaceholder" type="number" />
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">开始模拟</el-button>
@@ -55,13 +55,12 @@
                 <span><b>耗时：</b>{{ item.cost }}</span>
                 <span><b>状态：</b><b :style="{ color: item.color}">{{ item.status }}</b></span>
                 <span><b>创建时间：</b>{{ item.created }}</span>
-                <!-- <span><b>完成时间：</b>{{ item.updated }}</span> -->
               </div>
             </template>
-            <el-descriptions class="margin-top" title="基本信息" :column="4" :size="size" border>
-              <template slot="extra">
-                <el-button type="primary" size="big">删除</el-button>
-              </template>
+            <div style="text-align:center">
+              <el-button style="margin-top:20px" type="danger" size="medium" @click="deleteReport(item.id)">删除记录</el-button>
+            </div>
+            <el-descriptions style="margin-top:20px" :column="4" :size="size" border>
               <el-descriptions-item>
                 <template slot="label">
                   最小破产等级
@@ -123,7 +122,7 @@
 </template>
 
 <script>
-import { rtpTemplates, rtpSimulator, rtpReports } from '@/api/tools'
+import { rtpTemplates, rtpSimulator, rtpReports, deleteReport } from '@/api/tools'
 import { getToken, getAdminName } from '@/utils/auth'
 import moment from 'moment'
 import * as echarts from 'echarts'
@@ -134,11 +133,12 @@ export default {
         simID: null,
         playerCount: null,
         maxSpinTimes: null,
-        numProcess: 10
+        numProcess: null
       },
       simOptions: [
 
       ],
+      cpuNum: 0,
       loading: false,
       showProcess: false,
       reportID: 0,
@@ -163,6 +163,9 @@ export default {
     },
     disabled() {
       return this.listLoading || this.noMore
+    },
+    cpuPlaceholder() {
+      return '建议不超过' + this.cpuNum
     }
   },
   watch: {
@@ -178,6 +181,7 @@ export default {
     rtpTemplates()
       .then((response) => {
         this.simOptions = response.data.options
+        this.cpuNum = response.data.cpuNum
       })
       .catch(() => {
         this.$message({
@@ -265,6 +269,25 @@ export default {
         })
 
       this.listLoading = false
+    },
+    //
+    deleteReport(reportID) {
+      deleteReport(reportID)
+        .then((response) => {
+          this.$message({
+            showClose: true,
+            message: '删除成功',
+            type: 'success'
+          })
+          this.fetchAll(0)
+        })
+        .catch(() => {
+          this.$message({
+            showClose: true,
+            message: '删除失败',
+            type: 'warning'
+          })
+        })
     },
     // 开始模拟
     onSubmit() {

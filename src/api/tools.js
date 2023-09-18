@@ -45,3 +45,12 @@ export function rtpReports(curPage, perPage) {
     data: { currentPage: curPage, pageSize: perPage }
   })
 }
+
+export function deleteReport(reportID) {
+  return request({
+    url: '/tools/rtp/delete',
+    method: 'post',
+    data: { id: reportID }
+  })
+}
+
