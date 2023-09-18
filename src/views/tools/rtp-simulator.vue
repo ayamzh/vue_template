@@ -186,8 +186,6 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   created() {
     rtpTemplates()
       .then((response) => {
