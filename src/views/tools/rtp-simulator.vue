@@ -60,6 +60,14 @@
             <div style="text-align:center">
               <el-button style="margin-top:20px" type="danger" size="medium" @click="deleteReport(item.id)">删除记录</el-button>
             </div>
+            <div class="download">
+              <a
+                v-for="(file,index) in item.result.Files"
+                :key="index"
+                target="_black"
+                :href="[apiUrl + '/tools/report/download?id=' + item.id + '&index=' + index]"
+              ><h3>{{ file }} <span class="el-icon-download" /></h3></a>
+            </div>
             <el-descriptions style="margin-top:20px" :column="4" :size="size" border>
               <el-descriptions-item>
                 <template slot="label">
@@ -166,6 +174,9 @@ export default {
     },
     cpuPlaceholder() {
       return '建议不超过' + this.cpuNum
+    },
+    apiUrl() {
+      return process.env.VUE_APP_BASE_API
     }
   },
   watch: {
@@ -508,4 +519,17 @@ form {
   margin-top: 20px;
   margin-left:400px;
 }
+
+/* 设置 div 标签样式 */
+.download {
+  margin-bottom: 20px; /* 设置间距 */
+}
+
+/* 设置 a 标签样式 */
+.download a {
+  display: block;
+  margin-top : 20px;
+  margin-left: 20px; /* 设置 a 标签间距 */
+}
+
 </style>
