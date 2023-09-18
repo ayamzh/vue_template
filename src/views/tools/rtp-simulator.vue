@@ -44,7 +44,7 @@
           style="overflow:auto"
           @change="handleChange"
         >
-          <el-collapse-item v-for="item in simList" :key="item.id" :name="item.id">
+          <el-collapse-item v-for="item in simList" :key="item.id" class="myCollapse" :name="item.id">
             <template slot="title">
               <div class="title-container">
                 <span><b>ID：</b>{{ item.id }}</span>
@@ -203,7 +203,6 @@ export default {
       })
 
     this.fetchAll(0)
-
     return
   },
   beforeDestroy() {
@@ -447,6 +446,12 @@ export default {
         return
       }
 
+      // 获取屏幕宽度用于设置charts大小
+      const titleContainers = document.querySelectorAll('.myCollapse')
+      if (titleContainers.length > 0) {
+        this.width = titleContainers[0].offsetWidth
+      }
+
       if (report.result.BankruptcyPercent !== null && report.result.BankruptcyPercent.length > 0) {
         this.bankruptcyPercent(report.id, report.result.BankruptcyPercent)
       }
@@ -471,10 +476,11 @@ export default {
 
       const valueArray = data.map(obj => obj.Percent * 100)
 
+      const width = this.width > 0 ? this.width / 2 - 100 : 600
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(divDom, null, {
-        width: 600,
-        height: 400
+        width: width,
+        height: width * 3 / 4
       })
       // 绘制图表
       myChart.setOption({
