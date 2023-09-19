@@ -5,7 +5,7 @@
 
     <el-form ref="form" class="myForm" :model="form" label-width="150px">
       <el-form-item label="模拟template">
-        <el-select v-model.number="form.simID" placeholder="please select type" type="number">
+        <el-select v-model.number="form.simID" style="width: 300px" placeholder="please select type" type="number">
           <el-option v-for="item in simOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
@@ -15,9 +15,22 @@
       <el-form-item label="单个用户Spin次数">
         <el-input v-model.number="form.maxSpinTimes" type="number" />
       </el-form-item>
-      <el-form-item label="使用服务器CPU数量">
+      <!-- <el-form-item label="使用服务器CPU数量">
         <el-input v-model.number="form.numProcess" :placeholder="cpuPlaceholder" type="number" />
+      </el-form-item> -->
+
+      <el-form-item label="使用服务器CPU数量">
+        <template>
+          <el-slider
+            v-model="form.numProcess"
+            :min="1"
+            :max="cpuNum"
+            style="width: 460px"
+            show-input
+          />
+        </template>
       </el-form-item>
+
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">开始模拟</el-button>
       </el-form-item>
