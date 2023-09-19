@@ -17,6 +17,7 @@
         <el-button
           :loading="searchLoading"
           type="primary"
+          icon="el-icon-search"
           @click="onSearch"
         >查询</el-button>
       </el-form-item>

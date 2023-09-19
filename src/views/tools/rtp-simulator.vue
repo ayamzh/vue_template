@@ -3,7 +3,7 @@
 
     <div id="mazheng" />
 
-    <el-form ref="form" :model="form" label-width="150px">
+    <el-form ref="form" class="myForm" :model="form" label-width="150px">
       <el-form-item label="模拟template">
         <el-select v-model.number="form.simID" placeholder="please select type" type="number">
           <el-option v-for="item in simOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -66,7 +66,7 @@
                 :key="index"
                 target="_black"
                 :href="[apiUrl + '/tools/report/download?id=' + item.id + '&index=' + index]"
-              ><h3>{{ file }} <span class="el-icon-download" /></h3></a>
+              ><h3>{{ file.replace('./result/', '') }} <span class="el-icon-download" /></h3></a>
             </div>
             <el-descriptions style="margin-top:20px" :column="4" :size="size" border>
               <el-descriptions-item>
@@ -515,7 +515,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .table-container {
   text-align: left;
 }
@@ -529,9 +529,9 @@ export default {
   margin-left: 50px; /* 可以根据需要自定义左右间距 */
 }
 
-form {
+.myForm {
   margin-top: 20px;
-  margin-left:400px;
+  margin-left: 400px;
 }
 
 /* 设置 div 标签样式 */

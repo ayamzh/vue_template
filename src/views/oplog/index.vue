@@ -23,8 +23,8 @@
       </vxe-form-item>
       <vxe-form-item>
         <template #default>
-          <vxe-button type="submit" status="primary" size="small" content="查询" />
-          <vxe-button type="reset" size="medium" content="重置" />
+          <vxe-button type="submit" status="primary" size="big" content="查询" />
+          <vxe-button type="reset" size="big" content="重置" />
         </template>
       </vxe-form-item>
     </vxe-form>

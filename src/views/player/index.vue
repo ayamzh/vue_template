@@ -5,7 +5,7 @@
         <el-input v-model.trim="formSearch.name" placeholder="please input passport" @change="onSearch" />
       </el-form-item>
       <el-form-item>
-        <el-button :loading="searchLoading" type="primary" @click="onSearch">查询</el-button>
+        <el-button :loading="searchLoading" type="primary" icon="el-icon-search" @click="onSearch">查询</el-button>
       </el-form-item>
     </el-form>
     <el-divider />
