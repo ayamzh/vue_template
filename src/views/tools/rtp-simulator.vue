@@ -15,10 +15,9 @@
       <el-form-item label="单个用户Spin次数">
         <el-input v-model.number="form.maxSpinTimes" type="number" />
       </el-form-item>
-      <!-- <el-form-item label="使用服务器CPU数量">
-        <el-input v-model.number="form.numProcess" :placeholder="cpuPlaceholder" type="number" />
-      </el-form-item> -->
-
+      <el-form-item label="描述">
+        <el-input v-model.trim="form.desc" />
+      </el-form-item>
       <el-form-item label="使用服务器CPU数量">
         <template>
           <el-slider
@@ -60,14 +59,15 @@
           <el-collapse-item v-for="item in simList" :key="item.id" class="myCollapse" :name="item.id">
             <template slot="title">
               <div class="title-container">
-                <span><b>ID：</b>{{ item.id }}</span>
-                <span><b>模板：</b>{{ item.simID }}</span>
-                <span><b>人数：</b>{{ item.times }}</span>
-                <span><b>Spin次数：</b>{{ item.spinTimes }}</span>
-                <span><b>进程数：</b>{{ item.numProcess }}</span>
-                <span><b>耗时：</b>{{ item.cost }}</span>
-                <span><b>状态：</b><b :style="{ color: item.color}">{{ item.status }}</b></span>
-                <span><b>创建时间：</b>{{ item.created }}</span>
+                <span style="width:80px">ID：{{ item.id }}</span>
+                <span style="width:80px">模板：{{ item.simID }}</span>
+                <span style="width:100px">人数：{{ item.times }}</span>
+                <span style="width:120px">Spin次数：{{ item.spinTimes }}</span>
+                <span style="width:70px">进程数：{{ item.numProcess }}</span>
+                <span style="width:140px">耗时：{{ item.cost }}</span>
+                <span style="width:100px">状态：<b :style="{ color: item.color}">{{ item.status }}</b></span>
+                <span style="width:250px">创建时间：{{ item.created }}</span>
+                <span>备注：{{ item.description }}</span>
               </div>
             </template>
             <div style="text-align:center">
@@ -102,7 +102,7 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
-                  最小破产等级用户占比
+                  最大破产等级用户占比
                 </template>
                 {{ item.result.HighestBankruptcyLevelPercent }}
               </el-descriptions-item>
@@ -154,7 +154,8 @@ export default {
         simID: null,
         playerCount: null,
         maxSpinTimes: null,
-        numProcess: null
+        numProcess: null,
+        desc: null
       },
       simOptions: [
 
@@ -206,6 +207,7 @@ export default {
       .then((response) => {
         this.simOptions = response.data.options
         this.cpuNum = response.data.cpuNum
+        this.form.numProcess = this.cpuNum
       })
       .catch(() => {
         this.$message({
@@ -267,6 +269,7 @@ export default {
               spinTimes: item.spinTimes,
               numProcess: item.numProcess,
               adminName: item.adminName,
+              description: item.description,
               status: status,
               color: color,
               cost: this.changeSecondsToHours(item.updated - item.created),
@@ -539,7 +542,8 @@ export default {
 
 /* 可以根据需要自定义样式 */
 .title-container span {
-  margin-left: 50px; /* 可以根据需要自定义左右间距 */
+  margin-left: 20px; /* 可以根据需要自定义左右间距 */
+  display: inline-block;
 }
 
 .myForm {
