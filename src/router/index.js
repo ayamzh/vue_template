@@ -251,11 +251,11 @@ export const asyncRoutes = [
     meta: { title: '外链', icon: 'nested' },
     children: [
       {
-        path: 'http://kachingcasino.pmt.centurygame.io/pmt#/pmconf/conf_builder',
+        path: 'http://vb.pmt.centurygame.io/pmt#/pmconf/conf_builder',
         meta: { title: '配置表管理', icon: 'link' }
       },
       {
-        path: 'http://kachingcasino.pmt.centurygame.io/pmt#/visitor/database',
+        path: 'http://vb.pmt.centurygame.io/pmt#/visitor/database',
         meta: { title: '数据库访问', icon: 'link' }
       }
     ]
