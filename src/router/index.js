@@ -142,6 +142,22 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/mail',
+    component: Layout,
+    redirect: '/mail/send-simple',
+    name: 'Mail',
+    meta: { title: '邮件发放', icon: 'el-icon-s-promotion' },
+    children: [
+      {
+        path: 'send-simple',
+        name: 'send-simple',
+        component: () => import('@/views/mail/send-simple'),
+        meta: { title: '邮件发放', icon: 'el-icon-s-promotion' }
+      }
+    ]
+  },
+
+  {
     path: '/tools',
     component: Layout,
     redirect: '/tools/ride-rule',
