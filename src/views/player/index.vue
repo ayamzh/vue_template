@@ -34,11 +34,11 @@
       <el-form-item label="最近一次登录时间">
         <el-date-picker v-model="form.loginTime" type="datetime" placeholder="Pick a date" style="width: 100%" />
       </el-form-item>
-      <el-form-item label="当前时间">
-        <el-date-picker v-model="form.timeNow" type="datetime" placeholder="设置当前时间" style="width: 100%" />
+      <el-form-item label="用户自身时间">
+        <el-date-picker v-model="form.systemTime" type="datetime" placeholder="设置当前时间" style="width: 100%" />
       </el-form-item>
       <el-form-item label="时间偏移量">
-        <el-input v-model.number="form.timeOffset" type="number" placeholder="修改当前时间会跟随变化，单位秒" />
+        <el-input v-model.number="form.timeOffset" type="number" placeholder="修改当前时间会跟随变化，单位秒" :disabled="true" />
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
@@ -53,7 +53,7 @@ import { editPlayer, getPlayer } from '@/api/player'
 export default {
   data() {
     return {
-      localTimeOffset: null, // 本地和服务器时间差值
+      // localTimeOffset: null, // 本地和服务器时间差值
       formSearch: {
         name: ''
       },
@@ -67,20 +67,21 @@ export default {
         loginCount: null,
         loginTime: null,
         loginTimestamp: null,
-        timeOffset: null, // 时间偏移量
-        timeNow: null, // 根据偏移量算出的当前时间的YmdHis形式
-        systemTime: null // 服务器当前时间（不包含偏移量）
+        timeOffset: null,
+        systemTime: null,
+        systemTimestamp: null
       },
       loading: false,
       searchLoading: false
     }
   },
   watch: {
-    'form.registTime': function(val) {
+    'form.loginTime': function(val) {
       this.form.loginTimestamp = moment(val).unix()
     },
-    'form.timeNow': function(val) {
-      this.form.timeOffset = moment(val).unix() - (moment().unix() + this.localTimeOffset)
+    'form.systemTime': function(val) {
+      this.form.systemTimestamp = moment(val).unix()
+      this.form.timeOffset = this.form.systemTimestamp - moment().unix()
     }
   },
   methods: {
@@ -98,11 +99,9 @@ export default {
 
       editPlayer(this.form)
         .then((response) => {
-          response.data.loginTime = moment(response.data.loginTimestamp)
-            .format('YYYY-MM-DD HH:mm:ss')
-          response.data.timeNow = moment((response.data.systemTime + response.data.timeOffset) * 1000)
-            .format('YYYY-MM-DD HH:mm:ss')
-          this.localTimeOffset = moment().unix() - response.data.systemTime
+          response.data.loginTime = moment(response.data.loginTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
+          response.data.systemTimestamp = moment().unix() / 1000 + response.data.timeOffset
+          response.data.systemTime = moment(response.data.systemTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
           this.form = response.data
           this.loading = false
           this.$message({
@@ -119,12 +118,9 @@ export default {
       this.searchLoading = true
       getPlayer(this.formSearch.name)
         .then((response) => {
-          response.data.loginTime = moment(response.data.loginTimestamp)
-            .format('YYYY-MM-DD HH:mm:ss')
-          response.data.timeNow = moment((response.data.systemTime + response.data.timeOffset) * 1000)
-            .format('YYYY-MM-DD HH:mm:ss')
-          // 获取时间偏移量
-          this.localTimeOffset = moment().unix() - response.data.systemTime
+          response.data.loginTime = moment(response.data.loginTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
+          response.data.systemTimestamp = moment().unix() / 1000 + response.data.timeOffset
+          response.data.systemTime = moment(response.data.systemTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
           this.form = response.data
           this.searchLoading = false
         })

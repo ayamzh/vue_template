@@ -16,7 +16,7 @@
         <el-input v-model="form.body" type="textarea" placeholder="邮件内容" />
       </el-form-item>
       <el-form-item label="附带奖励">
-        <el-input v-model="form.customContent" placeholder="附件需填入通用奖励格式（可选）" />
+        <el-input v-model="form.customContent" placeholder="附件需填入通用奖励格式1_0_100_0（可选）" />
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">发送邮件</el-button>
