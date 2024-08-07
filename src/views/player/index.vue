@@ -42,23 +42,24 @@
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
+        <el-button :loading="deleting" type="danger" @click="onDelete">删除用户</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
-import { editPlayer, getPlayer } from '@/api/player'
+import moment from "moment";
+import { editPlayer, getPlayer, deletePlayer } from "@/api/player";
 export default {
   data() {
     return {
       // localTimeOffset: null, // 本地和服务器时间差值
       formSearch: {
-        name: ''
+        name: "",
       },
       form: {
-        fpID: '',
+        fpID: "",
         uid: null,
         exp: null,
         level: null,
@@ -69,72 +70,127 @@ export default {
         loginTimestamp: null,
         timeOffset: null,
         systemTime: null,
-        systemTimestamp: null
+        systemTimestamp: null,
       },
       loading: false,
-      searchLoading: false
-    }
+      searchLoading: false,
+    };
   },
   watch: {
-    'form.loginTime': function(val) {
-      this.form.loginTimestamp = moment(val).unix()
+    "form.loginTime": function (val) {
+      this.form.loginTimestamp = moment(val).unix();
     },
-    'form.systemTime': function(val) {
-      this.form.systemTimestamp = moment(val).unix()
-      this.form.timeOffset = this.form.systemTimestamp - moment().unix()
-    }
+    "form.systemTime": function (val) {
+      this.form.systemTimestamp = moment(val).unix();
+      this.form.timeOffset = this.form.systemTimestamp - moment().unix();
+    },
   },
   methods: {
     onSubmit() {
-      this.loading = true
-      if (this.form.name === '') {
+      this.loading = true;
+      if (this.form.name === "") {
         this.$message({
           showClose: true,
-          message: '需要填写用户名',
-          type: 'warning'
-        })
-        this.loading = false
-        return
+          message: "需要填写用户名",
+          type: "warning",
+        });
+        this.loading = false;
+        return;
       }
 
       editPlayer(this.form)
         .then((response) => {
-          response.data.loginTime = moment(response.data.loginTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
-          response.data.systemTimestamp = moment().unix() / 1000 + response.data.timeOffset
-          response.data.systemTime = moment(response.data.systemTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
-          this.form = response.data
-          this.loading = false
+          response.data.loginTime = moment(
+            response.data.loginTimestamp * 1000
+          ).format("YYYY-MM-DD HH:mm:ss");
+          response.data.systemTimestamp =
+            moment().unix() / 1000 + response.data.timeOffset;
+          response.data.systemTime = moment(
+            response.data.systemTimestamp * 1000
+          ).format("YYYY-MM-DD HH:mm:ss");
+          this.form = response.data;
+          this.loading = false;
           this.$message({
             showClose: true,
-            message: '修改成功',
-            type: 'success'
-          })
+            message: "修改成功",
+            type: "success",
+          });
         })
         .catch(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     onSearch() {
-      this.searchLoading = true
+      this.searchLoading = true;
       getPlayer(this.formSearch.name)
         .then((response) => {
-          response.data.loginTime = moment(response.data.loginTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
-          response.data.systemTimestamp = moment().unix() / 1000 + response.data.timeOffset
-          response.data.systemTime = moment(response.data.systemTimestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
-          this.form = response.data
-          this.searchLoading = false
+          response.data.loginTime = moment(
+            response.data.loginTimestamp * 1000
+          ).format("YYYY-MM-DD HH:mm:ss");
+          response.data.systemTimestamp =
+            moment().unix() / 1000 + response.data.timeOffset;
+          response.data.systemTime = moment(
+            response.data.systemTimestamp * 1000
+          ).format("YYYY-MM-DD HH:mm:ss");
+          this.form = response.data;
+          this.searchLoading = false;
         })
         .catch(() => {
-          this.searchLoading = false
-        })
+          this.searchLoading = false;
+        });
     },
     onCancel() {
       this.$message({
-        message: 'cancel!',
-        type: 'warning'
+        message: "cancel!",
+        type: "warning",
+      });
+    },
+    onDelete() {
+      this.$confirm("确定要删除该用户吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
+        .then(() => {
+          this.deleting = true;
+          // 调用删除接口（假设有 deletePlayer 方法）
+          deletePlayer(this.form.uid)
+            .then(() => {
+              this.$message({
+                type: "success",
+                message: "用户删除成功!",
+              });
+              // 清空表单
+              this.form = {
+                fpID: "",
+                uid: null,
+                exp: null,
+                level: null,
+                coin: null,
+                gem: null,
+                loginCount: null,
+                loginTime: null,
+                loginTimestamp: null,
+                timeOffset: null,
+                systemTime: null,
+                systemTimestamp: null,
+              };
+            })
+            .catch(() => {
+              this.$message({
+                type: "error",
+                message: "删除失败!",
+              });
+            })
+            .finally(() => {
+              this.deleting = false;
+            });
+        })
+        .catch(() => {
+          // 用户点击取消时的处理
+        });
     }
-  }
+  },
 }
 </script>
 

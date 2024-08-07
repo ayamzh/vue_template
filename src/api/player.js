@@ -16,3 +16,11 @@ export function editPlayer(player) {
   })
 }
 
+export function deletePlayer(uid) {
+  return request({
+    url: '/player/delete',
+    method: 'post',
+    data: { uid }
+  })
+}
+
