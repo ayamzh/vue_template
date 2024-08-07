@@ -83,7 +83,6 @@ export default {
     },
     "form.systemTime": function (val) {
       this.form.systemTimestamp = moment(val).unix();
-      this.form.timeOffset = this.form.systemTimestamp - moment().unix();
     },
   },
   methods: {
