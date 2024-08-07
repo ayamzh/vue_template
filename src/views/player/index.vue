@@ -82,9 +82,6 @@ export default {
       this.form.loginTimestamp = moment(val).unix();
     },
     "form.systemTime": function (val) {
-      console.log("watch systemTime")
-      console.log(moment(val).unix())
-      console.log(this.form.systemTimestamp)
       this.form.systemTimestamp = moment(val).unix();
       this.form.timeOffset = this.form.systemTimestamp - moment().unix();
     },
