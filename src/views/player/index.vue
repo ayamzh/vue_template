@@ -58,6 +58,7 @@ export default {
       formSearch: {
         name: "",
       },
+      deleting: null,
       form: {
         fpID: "",
         uid: null,
@@ -81,6 +82,9 @@ export default {
       this.form.loginTimestamp = moment(val).unix();
     },
     "form.systemTime": function (val) {
+      console.log("watch systemTime")
+      console.log(moment(val).unix())
+      console.log(this.form.systemTimestamp)
       this.form.systemTimestamp = moment(val).unix();
       this.form.timeOffset = this.form.systemTimestamp - moment().unix();
     },
@@ -104,7 +108,7 @@ export default {
             response.data.loginTimestamp * 1000
           ).format("YYYY-MM-DD HH:mm:ss");
           response.data.systemTimestamp =
-            moment().unix() / 1000 + response.data.timeOffset;
+            moment().unix() + response.data.timeOffset;
           response.data.systemTime = moment(
             response.data.systemTimestamp * 1000
           ).format("YYYY-MM-DD HH:mm:ss");
@@ -126,12 +130,13 @@ export default {
         .then((response) => {
           response.data.loginTime = moment(
             response.data.loginTimestamp * 1000
-          ).format("YYYY-MM-DD HH:mm:ss");
+          ).format("YYYY-MM-DD HH:mm:ss")
           response.data.systemTimestamp =
-            moment().unix() / 1000 + response.data.timeOffset;
+            moment().unix() + response.data.timeOffset;
           response.data.systemTime = moment(
             response.data.systemTimestamp * 1000
-          ).format("YYYY-MM-DD HH:mm:ss");
+          ).format("YYYY-MM-DD HH:mm:ss")
+
           this.form = response.data;
           this.searchLoading = false;
         })

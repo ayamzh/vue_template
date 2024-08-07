@@ -36,6 +36,7 @@ import { deletePlayer } from '@/api/player'
 export default {
   data() {
     return {
+      deleting: null,
       formSearch: {
         name: ''
       },
