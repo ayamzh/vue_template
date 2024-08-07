@@ -38,7 +38,7 @@
         <el-date-picker v-model="form.systemTime" type="datetime" placeholder="设置当前时间" style="width: 100%" />
       </el-form-item>
       <el-form-item label="时间偏移量">
-        <el-input v-model.number="form.timeOffset" type="number" placeholder="修改当前时间会跟随变化，单位秒" :disabled="true" />
+        <el-input v-model.number="form.timeOffset" type="number" placeholder="正数表示从当前时间往后推" />
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
