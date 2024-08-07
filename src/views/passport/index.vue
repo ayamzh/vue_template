@@ -21,8 +21,6 @@
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
-      </el-form-item>
-      <el-form-item>
         <el-button :loading="deleting" type="danger" @click="onDelete">删除</el-button>
       </el-form-item>
     </el-form>
