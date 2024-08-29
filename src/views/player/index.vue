@@ -40,6 +40,9 @@
       <el-form-item label="时间偏移量">
         <el-input v-model.number="form.timeOffset" type="number" placeholder="正数表示从当前时间往后推" />
       </el-form-item>
+      <el-form-item label="PowerID">
+        <el-input v-model.number="form.powerID" type="number" placeholder="powerid" />
+      </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
         <el-button :loading="deleting" type="danger" @click="onDelete">删除用户</el-button>
@@ -69,9 +72,10 @@ export default {
         loginCount: null,
         loginTime: null,
         loginTimestamp: null,
-        timeOffset: null,
+        timeOffset: 0,
         systemTime: null,
         systemTimestamp: null,
+        powerID: null
       },
       loading: false,
       searchLoading: false,
@@ -103,11 +107,6 @@ export default {
           response.data.loginTime = moment(
             response.data.loginTimestamp * 1000
           ).format("YYYY-MM-DD HH:mm:ss");
-          response.data.systemTimestamp =
-            moment().unix() + response.data.timeOffset;
-          response.data.systemTime = moment(
-            response.data.systemTimestamp * 1000
-          ).format("YYYY-MM-DD HH:mm:ss");
           this.form = response.data;
           this.loading = false;
           this.$message({
@@ -127,12 +126,6 @@ export default {
           response.data.loginTime = moment(
             response.data.loginTimestamp * 1000
           ).format("YYYY-MM-DD HH:mm:ss")
-          response.data.systemTimestamp =
-            moment().unix() + response.data.timeOffset;
-          response.data.systemTime = moment(
-            response.data.systemTimestamp * 1000
-          ).format("YYYY-MM-DD HH:mm:ss")
-
           this.form = response.data;
           this.searchLoading = false;
         })
@@ -175,6 +168,7 @@ export default {
                 timeOffset: null,
                 systemTime: null,
                 systemTimestamp: null,
+                powerID: null,
               };
             })
             .catch(() => {
