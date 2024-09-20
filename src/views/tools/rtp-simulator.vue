@@ -16,17 +16,11 @@
         <el-input v-model.number="form.maxSpinTimes" type="number" />
       </el-form-item>
       <el-form-item label="描述">
-        <el-input v-model.trim="form.desc" />
+        <el-input v-model="form.desc" />
       </el-form-item>
       <el-form-item label="使用服务器CPU数量">
         <template>
-          <el-slider
-            v-model="form.numProcess"
-            :min="1"
-            :max="cpuNum"
-            style="width: 460px"
-            show-input
-          />
+          <el-slider v-model="form.numProcess" :min="1" :max="cpuNum" style="width: 460px" show-input />
         </template>
       </el-form-item>
 
@@ -48,14 +42,8 @@
 
     <el-row>
       <el-col :span="24">
-        <el-collapse
-          v-model="activeNames"
-          v-infinite-scroll="load"
-          infinite-scroll-disabled="disabled"
-          accordion
-          style="overflow:auto"
-          @change="handleChange"
-        >
+        <el-collapse v-model="activeNames" v-infinite-scroll="load" infinite-scroll-disabled="disabled" accordion
+          style="overflow:auto" @change="handleChange">
           <el-collapse-item v-for="item in simList" :key="item.id" class="myCollapse" :name="item.id">
             <template slot="title">
               <div class="title-container">
@@ -65,21 +53,20 @@
                 <span style="width:120px">Spin次数：{{ item.spinTimes }}</span>
                 <span style="width:70px">进程数：{{ item.numProcess }}</span>
                 <span style="width:140px">耗时：{{ item.cost }}</span>
-                <span style="width:100px">状态：<b :style="{ color: item.color}">{{ item.status }}</b></span>
+                <span style="width:100px">状态：<b :style="{ color: item.color }">{{ item.status }}</b></span>
                 <span style="width:250px">创建时间：{{ item.created }}</span>
                 <span>备注：{{ item.description }}</span>
               </div>
             </template>
             <div style="text-align:center">
-              <el-button style="margin-top:20px" type="danger" size="medium" @click="deleteReport(item.id)">删除记录</el-button>
+              <el-button style="margin-top:20px" type="danger" size="medium"
+                @click="deleteReport(item.id)">删除记录</el-button>
             </div>
             <div class="download">
-              <a
-                v-for="(file,index) in item.result.Files"
-                :key="index"
-                target="_black"
-                :href="[apiUrl + '/tools/report/download?id=' + item.id + '&index=' + index]"
-              ><h3>{{ file.replace('./result/', '') }} <span class="el-icon-download" /></h3></a>
+              <a v-for="(file, index) in item.result.Files" :key="index" target="_black"
+                :href="[apiUrl + '/tools/report/download?id=' + item.id + '&index=' + index]">
+                <h3>{{ file.replace('./result/', '') }} <span class="el-icon-download" /></h3>
+              </a>
             </div>
             <el-descriptions style="margin-top:20px" :column="4" :size="size" border>
               <el-descriptions-item>
@@ -146,6 +133,7 @@
               </el-table>
             </div>
             <div :id="'bankruptcyPercent' + item.id" :ref="'bankruptcyPercent' + item.id" />
+            <div :id="'bankruptcyPercentBySpinGroup' + item.id" :ref="'bankruptcyPercentBySpinGroup' + item.id" />
           </el-collapse-item>
         </el-collapse>
         <p v-if="loading" style="text-align: center">加载中...</p>
@@ -207,7 +195,7 @@ export default {
     }
   },
   watch: {
-    reportID: function(newVal, oldVal) {
+    reportID: function (newVal, oldVal) {
       if (newVal > 0 && newVal !== oldVal) {
         this.initSSE()
         this.showProcess = true
@@ -382,7 +370,7 @@ export default {
     initSSE() {
       this.cli = this.$sse.create({
         url: process.env.VUE_APP_BASE_API +
-      `/sse/event?type=rtpSimulator&reportID=${this.reportID}`,
+          `/sse/event?type=rtpSimulator&reportID=${this.reportID}`,
         // format: 'json',
         polyfill: true,
         polyfillOptions: {
@@ -491,6 +479,7 @@ export default {
 
       if (report.result.BankruptcyPercent !== null && report.result.BankruptcyPercent.length > 0) {
         this.bankruptcyPercent(report.id, report.result.BankruptcyPercent)
+        this.bankruptcyPercentBySpinGroup(report.id, report.result.BankruptcyPercentSpinGroup)
       }
     },
     // [
@@ -513,16 +502,52 @@ export default {
 
       const valueArray = data.map(obj => obj.Percent * 100)
 
-      const width = this.width > 0 ? this.width / 2 - 100 : 600
+      const width = this.width > 0 ? this.width - 100 : 1024
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(divDom, null, {
         width: width,
-        height: width * 3 / 4
+        height: width * 1 / 4
       })
       // 绘制图表
       myChart.setOption({
         title: {
-          text: '破产等级分布'
+          text: '破产等级分布按等级'
+        },
+        tooltip: {},
+        xAxis: {
+          data: nameArray
+        },
+        yAxis: {},
+        series: [
+          {
+            name: '占比',
+            type: 'bar',
+            data: valueArray
+          }
+        ]
+      })
+      this.chartList.push(myChart)
+      // end
+    },
+    bankruptcyPercentBySpinGroup(reportID, data) {
+      const divDom = document.getElementById('bankruptcyPercentBySpinGroup' + reportID)
+
+      const nameArray = data.map((obj) => {
+        return obj.MinSpinTimes + '-' + obj.MaxSpinTimes
+      })
+
+      const valueArray = data.map(obj => obj.Percent * 100)
+
+      const width = this.width > 0 ? this.width - 100 : 1024
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(divDom, null, {
+        width: width,
+        height: width * 1 / 4
+      })
+      // 绘制图表
+      myChart.setOption({
+        title: {
+          text: '破产等级分布按SPIN次数'
         },
         tooltip: {},
         xAxis: {
@@ -555,7 +580,8 @@ export default {
 
 /* 可以根据需要自定义样式 */
 .title-container span {
-  margin-left: 20px; /* 可以根据需要自定义左右间距 */
+  margin-left: 20px;
+  /* 可以根据需要自定义左右间距 */
   display: inline-block;
 }
 
@@ -566,14 +592,15 @@ export default {
 
 /* 设置 div 标签样式 */
 .download {
-  margin-bottom: 20px; /* 设置间距 */
+  margin-bottom: 20px;
+  /* 设置间距 */
 }
 
 /* 设置 a 标签样式 */
 .download a {
   display: block;
-  margin-top : 20px;
-  margin-left: 20px; /* 设置 a 标签间距 */
+  margin-top: 20px;
+  margin-left: 20px;
+  /* 设置 a 标签间距 */
 }
-
 </style>
