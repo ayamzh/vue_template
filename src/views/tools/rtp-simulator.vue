@@ -135,8 +135,7 @@
             <div style="margin-top: 20px;">
               <el-table :data="item.result.BankruptcySectionBySpinGroup" style="width: 100%">
                 <el-table-column label="破产区间">
-                  <template slot-scope="scope">[{{ scope.row.MinSpinTimes }} , {{ scope.row.MaxSpinTimesno
-                    }}]</template>
+                  <template slot-scope="scope">[{{ scope.row.MinSpinTimes }} , {{ scope.row.MaxSpinTimes }}]</template>
                 </el-table-column>
                 <el-table-column prop="PlayerCount" label="人数" />
                 <el-table-column prop="PlayerCountPercent" label="占比" />
