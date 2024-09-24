@@ -132,6 +132,18 @@
                 <el-table-column prop="RTP" label="RTP" />
               </el-table>
             </div>
+            <div style="margin-top: 20px;">
+              <el-table :data="item.result.BankruptcySectionByGroup" style="width: 100%">
+                <el-table-column label="破产区间">
+                  <template slot-scope="scope">[{{ scope.row.MinSpinTimes }} , {{ scope.row.MaxSpinTimes }}]</template>
+                </el-table-column>
+                <el-table-column prop="PlayerCount" label="人数" />
+                <el-table-column prop="PlayerCountPercent" label="占比" />
+                <el-table-column prop="PlayerCountPercentTotal" label="累计占比" />
+                <el-table-column prop="PlayerCountLackPercent" label="1-累计占比" />
+                <el-table-column prop="RTP" label="RTP" />
+              </el-table>
+            </div>
             <div :id="'bankruptcyPercent' + item.id" :ref="'bankruptcyPercent' + item.id" />
             <div :id="'bankruptcyPercentBySpinGroup' + item.id" :ref="'bankruptcyPercentBySpinGroup' + item.id" />
           </el-collapse-item>
