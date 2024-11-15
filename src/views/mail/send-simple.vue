@@ -67,9 +67,11 @@ export default {
       if (selectedTemplate) {
         this.form.subject = selectedTemplate.title
         this.form.body = selectedTemplate.content
+        this.form.customContent = selectedTemplate.rewards // 新增 rewards 填充逻辑
       } else {
         this.form.subject = ''
         this.form.body = ''
+        this.form.customContent = ''
       }
     },
     onSubmit() {

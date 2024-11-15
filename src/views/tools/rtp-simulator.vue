@@ -117,6 +117,12 @@
                 </template>
                 {{ item.result.RealMaxSpinTimes }}
               </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  总RTP
+                </template>
+                {{ item.result.Rtp }}%
+              </el-descriptions-item>
             </el-descriptions>
             <el-divider />
             <div style="margin-top: 20px;">
@@ -256,7 +262,6 @@ export default {
           this.reportID = response.data.reportID
           this.curPage = page > 0 ? page : 1
           this.totalPage = Math.ceil(response.data.totalResult / this.pageSize)
-          console.log(response.data.totalResult)
           const tmpList = response.data.list.map((item) => {
             let status, color
             switch (item.status) {
