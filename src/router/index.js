@@ -158,6 +158,22 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/report',
+    component: Layout,
+    redirect: '/report/index',
+    name: 'Mail',
+    meta: { title: '举报系统', icon: 'el-icon-s-promotion' },
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/report/index'),
+        meta: { title: '举报记录', icon: 'el-icon-s-promotion' }
+      }
+    ]
+  },
+
+  {
     path: '/tools',
     component: Layout,
     redirect: '/tools/ride-rule',
