@@ -40,7 +40,7 @@
           </a>
         </template>
       </vxe-column>
-      <vxe-column field="reporterType" title="举报类型" width="200" sortable />
+      <vxe-column field="reportType" title="举报类型" width="200" sortable />
       <vxe-column field="insertTime" title="操作时间" />
     </vxe-table>
 
@@ -100,7 +100,7 @@ export default {
               id: item.ID,
               reporterID: item.ReporterID,
               defendantID: item.DefendantID,
-              reporterType: formatReportType(item.ReporterType),
+              reportType: formatReportType(Number(item.ReportType)),
               insertTime: moment.unix(item.InsertTime).format('YYYY-MM-DD HH:mm:ss')
             }
           })
