@@ -92,7 +92,6 @@ export default {
       this.formData.pageSize = this.tablePage.pageSize
       this.formData.startTimestamp = moment(this.formData.startTime).unix()
       this.formData.endTimestamp = moment(this.formData.endTime).unix()
-      console.log(this.formData)
       getReports(this.formData)
         .then((response) => {
           this.tableData = response.data.list.map((item) => {
@@ -100,7 +99,7 @@ export default {
               id: item.ID,
               reporterID: item.ReporterID,
               defendantID: item.DefendantID,
-              reportType: formatReportType(Number(item.ReportType)),
+              reportType: formatReportType(item.ReportType),
               insertTime: moment.unix(item.InsertTime).format('YYYY-MM-DD HH:mm:ss')
             }
           })
