@@ -17,8 +17,9 @@
         <el-date-picker v-model="form.banEndtime" type="datetime" placeholder="Pick a date" style="width: 100%" />
       </el-form-item>
       <el-form-item label="小黑屋类型">
-        <el-select v-model.number="form.reportType" placeholder="请选择类型" style="width: 100%">
-          <el-option v-for="(label, value) in reportTypeOptions" :key="value" :label="label" :value="value" />
+        <el-select v-model="form.reportType" placeholder="请选择类型" style="width: 100%">
+          <el-option v-for="option in reportTypeOptions" :key="option.value" :label="option.label"
+            :value="option.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -56,7 +57,11 @@ export default {
     }
   },
   mounted() {
-    this.reportTypeOptions = reportTypes()
+    const rawTypeMap = reportTypes(); // 获取原始 typeMap
+    this.reportTypeOptions = Object.entries(rawTypeMap).map(([key, value]) => ({
+      value: Number(key), // 转换键为数字类型
+      label: value,       // 保留显示的文本
+    }));
     const { defendantID } = this.$route.query;
     if (defendantID) {
       this.formSearch.name = String(defendantID); // 假设表单搜索字段为 name
