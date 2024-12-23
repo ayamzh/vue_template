@@ -169,6 +169,12 @@ export const asyncRoutes = [
         name: 'index',
         component: () => import('@/views/report/index'),
         meta: { title: '举报记录', icon: 'el-icon-s-promotion' }
+      },
+      {
+        path: 'detail',
+        name: 'detail',
+        component: () => import('@/views/report/detail'),
+        meta: { title: '处置用户', icon: 'el-icon-s-promotion' }
       }
     ]
   },

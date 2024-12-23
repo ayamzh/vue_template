@@ -13,12 +13,12 @@
       </vxe-form-item>
       <vxe-form-item title="举报者" field="reporterID" :item-render="{}" span="4">
         <template #default="{ data }">
-          <vxe-input v-model="data.reporterID" placeholder="请输入名称" />
+          <vxe-input v-model.number="data.reporterID" placeholder="请输入名称" />
         </template>
       </vxe-form-item>
       <vxe-form-item title="被举报者" field="defendantID" :item-render="{}" span="4">
         <template #default="{ data }">
-          <vxe-input v-model="data.defendantID" placeholder="请输入名称" />
+          <vxe-input v-model.number="data.defendantID" placeholder="请输入名称" />
         </template>
       </vxe-form-item>
       <vxe-form-item>
@@ -32,7 +32,14 @@
       :data="tableData" style="margin-top: 20px;">
       <vxe-column field="id" title="ID" width="200" page-sizes />
       <vxe-column field="reporterID" title="举报者" width="200" page-sizes />
-      <vxe-column field="defendantID" title="被举报者" width="200" page-sizes />
+      <vxe-column title="被举报者" width="200">
+        <template #default="{ row }">
+          <a href="javascript:void(0)" @click="handleDefendantClick(row.defendantID)"
+            style="color: #409EFF; cursor: pointer;">
+            {{ row.defendantID }}
+          </a>
+        </template>
+      </vxe-column>
       <vxe-column field="reporterType" title="举报类型" width="200" sortable />
       <vxe-column field="insertTime" title="操作时间" />
     </vxe-table>
@@ -79,8 +86,8 @@ export default {
     },
     fetchAll() {
       this.loading = true
-      this.formData.defendantID = Number(this.formData.defendantID)
-      this.formData.reporterID = Number(this.formData.reporterID)
+      this.formData.defendantID = this.formData.defendantID
+      this.formData.reporterID = this.formData.reporterID
       this.formData.currentPage = this.tablePage.currentPage
       this.formData.pageSize = this.tablePage.pageSize
       this.formData.startTimestamp = moment(this.formData.startTime).unix()
@@ -113,6 +120,13 @@ export default {
       this.tablePage.currentPage = currentPage
       this.tablePage.pageSize = pageSize
       this.fetchAll()
+    },
+    handleDefendantClick(defendantID) {
+      // 跳转到目标页面，并传递被举报者ID作为参数
+      this.$router.push({
+        path: '/report/detail', // 替换为实际目标页面路径
+        query: { defendantID }
+      });
     }
   }
 }
