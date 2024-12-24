@@ -13,12 +13,12 @@
       </vxe-form-item>
       <vxe-form-item title="开始时间" field="insertStartTime" span="4" :item-render="{}" title-overflow="ellipsis">
         <template #default="{ data }">
-          <vxe-input v-model="data.startTime" type="datetime" placeholder="请选择日期" clearable />
+          <vxe-input v-model="data.insertStartTime" type="datetime" placeholder="请选择日期" clearable />
         </template>
       </vxe-form-item>
       <vxe-form-item title="结束时间" field="insertEndTime" span="4" :item-render="{}" title-overflow="ellipsis">
         <template #default="{ data }">
-          <vxe-input v-model="data.endTime" type="datetime" placeholder="请选择日期" clearable />
+          <vxe-input v-model="data.insertEndTime" type="datetime" placeholder="请选择日期" clearable />
         </template>
       </vxe-form-item>
       <vxe-form-item title="用户ID" field="uid" :item-render="{}" span="4">
@@ -100,7 +100,8 @@ export default {
       this.formData.insertEndTimestamp = moment(this.formData.insertEndTime).unix()
       getBanList(this.formData)
         .then((response) => {
-          this.tableData = response.data.list.map((item) => {
+          const list = response.data.list || []
+          this.tableData = list.map((item) => {
             return {
               id: item.ID,
               uid: item.Uid,
@@ -113,7 +114,6 @@ export default {
           this.loading = false
         })
         .catch(() => {
-          console.log("22222222")
           this.$message({
             showClose: true,
             message: '获取失败',

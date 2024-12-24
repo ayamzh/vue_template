@@ -94,7 +94,8 @@ export default {
       this.formData.endTimestamp = moment(this.formData.endTime).unix()
       getReports(this.formData)
         .then((response) => {
-          this.tableData = response.data.list.map((item) => {
+          const list = response.data.list || []
+          this.tableData = list.map((item) => {
             return {
               id: item.ID,
               reporterID: item.ReporterID,
