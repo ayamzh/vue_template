@@ -63,8 +63,14 @@ export default {
       label: value,       // 保留显示的文本
     }));
     const { defendantID } = this.$route.query;
+    const { uid } = this.$route.query;
     if (defendantID) {
       this.formSearch.name = String(defendantID); // 假设表单搜索字段为 name
+      this.onSearch(); // 调用查询方法
+    }
+
+    if (uid) {
+      this.formSearch.name = String(uid); // 假设表单搜索字段为 name
       this.onSearch(); // 调用查询方法
     }
   },
