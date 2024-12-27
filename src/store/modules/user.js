@@ -7,7 +7,8 @@ const getDefaultState = () => {
     token: getToken(),
     avatar: '',
     adminName: getAdminName(),
-    role: ''
+    role: '',
+    serverEnv: ''
   }
 }
 
@@ -29,6 +30,10 @@ const mutations = {
   // 新增
   SET_ROLE: (state, role) => {
     state.role = role
+  },
+  // 新增
+  SET_ENV: (state, serverEnv) => {
+    state.serverEnv = serverEnv
   }
 }
 
@@ -65,10 +70,11 @@ const actions = {
             return reject('Verification failed, please Login again.')
           }
 
-          const { avatar, role } = data
+          const { avatar, role, serverEnv } = data
           // 存入state
           commit('SET_AVATAR', avatar)
           commit('SET_ROLE', role)
+          commit('SET_ENV', serverEnv)
           resolve(data)
         })
         .catch((error) => {
