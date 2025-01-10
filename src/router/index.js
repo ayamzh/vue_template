@@ -180,7 +180,13 @@ export const asyncRoutes = [
         path: 'ban',
         name: 'ban',
         component: () => import('@/views/report/ban'),
-        meta: { title: '拉黑记录', icon: 'el-icon-s-promotion' }
+        meta: { title: '处置记录', icon: 'el-icon-s-promotion' }
+      },
+      {
+        path: 'banuser',
+        name: 'banuser',
+        component: () => import('@/views/report/banuser'),
+        meta: { title: '已处置用户', icon: 'el-icon-s-promotion' }
       }
     ]
   },

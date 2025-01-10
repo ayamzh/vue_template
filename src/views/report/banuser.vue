@@ -11,12 +11,12 @@
           <vxe-input v-model="data.endTime" type="datetime" placeholder="请选择日期" clearable />
         </template>
       </vxe-form-item>
-      <vxe-form-item title="判决开始" field="insertStartTime" span="3" :item-render="{}" title-overflow="ellipsis">
+      <vxe-form-item title="更新开始" field="insertStartTime" span="3" :item-render="{}" title-overflow="ellipsis">
         <template #default="{ data }">
           <vxe-input v-model="data.insertStartTime" type="datetime" placeholder="请选择日期" clearable />
         </template>
       </vxe-form-item>
-      <vxe-form-item title="判决结束" field="insertEndTime" span="3" :item-render="{}" title-overflow="ellipsis">
+      <vxe-form-item title="更新结束" field="insertEndTime" span="3" :item-render="{}" title-overflow="ellipsis">
         <template #default="{ data }">
           <vxe-input v-model="data.insertEndTime" type="datetime" placeholder="请选择日期" clearable />
         </template>
@@ -29,10 +29,12 @@
       <vxe-form-item title="排序方式" field="sortOrder" span="3">
         <template #default="{ data }">
           <vxe-select v-model="data.sortOrder" placeholder="请选择排序方式" clearable>
-            <vxe-option value="1" label="ID降序" />
-            <vxe-option value="2" label="ID升序" />
-            <vxe-option value="3" label="UID降序" />
-            <vxe-option value="4" label="UID升序" />
+            <vxe-option value="1" label="封禁时间降序" />
+            <vxe-option value="2" label="封禁时间升序" />
+            <vxe-option value="3" label="判决时间降序" />
+            <vxe-option value="4" label="判决时间升序" />
+            <vxe-option value="5" label="UID降序" />
+            <vxe-option value="6" label="UID升序" />
           </vxe-select>
         </template>
       </vxe-form-item>
@@ -45,8 +47,8 @@
     </vxe-form>
     <vxe-table border show-header-overflow show-overflow :row-config="{ isHover: true }" :loading="loading"
       :data="tableData" style="margin-top: 20px;">
-      <vxe-column field="id" title="ID" width="200" page-sizes />
-      <vxe-column title="用户ID" width="200">
+      <!-- <vxe-column field="id" title="ID" width="200" page-sizes /> -->
+      <vxe-column title="用户ID" width="200" page-sizes>
         <template #default="{ row }">
           <a href="javascript:void(0)" @click="handleDefendantClick(row.uid)" style="color: #409EFF; cursor: pointer;">
             {{ row.uid }}
@@ -68,7 +70,7 @@
 
 <script>
 import moment from 'moment'
-import { getBanList } from '@/api/report'
+import { getBanUserList } from '@/api/report'
 import { formatBanType } from '@/api/report'
 
 
@@ -111,7 +113,7 @@ export default {
       this.formData.insertStartTimestamp = moment(this.formData.insertStartTime).unix()
       this.formData.insertEndTimestamp = moment(this.formData.insertEndTime).unix()
       this.formData.sortOrder = this.formData.sortOrder || 1
-      getBanList(this.formData)
+      getBanUserList(this.formData)
         .then((response) => {
           const list = response.data.list || []
           this.tableData = list.map((item) => {

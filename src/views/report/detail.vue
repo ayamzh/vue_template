@@ -11,13 +11,17 @@
     <el-divider />
     <el-form ref="form" :model="form" label-width="150px">
       <el-form-item label="Uid">
-        <el-input v-model.number="form.uid" :disabled="true" required />
+        <el-input v-model.number="form.uid" :disabled="true" required style="width: 30%" />
       </el-form-item>
       <el-form-item label="小黑屋到期时间">
-        <el-date-picker v-model="form.banEndtime" type="datetime" placeholder="Pick a date" style="width: 100%" />
+        <el-date-picker v-model="form.banEndtime" type="datetime" placeholder="Pick a date" style="width: 30%" />
+      </el-form-item>
+      <el-form-item label="封禁天数">
+        <el-input-number v-model.number="form.banDays" :min="-9999" :max="9999" placeholder="请输入封禁天数 范围-9999~9999"
+          style="width: 30%" />
       </el-form-item>
       <el-form-item label="小黑屋类型">
-        <el-select v-model="form.reportType" placeholder="请选择类型" style="width: 100%">
+        <el-select v-model="form.reportType" placeholder="请选择类型" style="width: 30%">
           <el-option v-for="option in reportTypeOptions" :key="option.value" :label="option.label"
             :value="option.value" />
         </el-select>

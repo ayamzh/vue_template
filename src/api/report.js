@@ -59,6 +59,15 @@ export function getBanList(formData) {
   })
 }
 
+export function getBanUserList(formData) {
+  return request({
+    url: '/banuser/list',
+    method: 'post',
+    data: formData
+  })
+}
+
+
 export function formatBanType(banType) {
   if (banType == null) {
     return '未成年人'
