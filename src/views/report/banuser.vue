@@ -118,10 +118,9 @@ export default {
           const list = response.data.list || []
           this.tableData = list.map((item) => {
             return {
-              id: item.ID,
               uid: item.Uid,
               banType: formatBanType(item.BanType),
-              insertTime: moment.unix(item.InsertTime).format('YYYY-MM-DD HH:mm:ss'),
+              insertTime: moment.unix(item.LastUpdateTime).format('YYYY-MM-DD HH:mm:ss'),
               endTime: moment.unix(item.EndTime).format('YYYY-MM-DD HH:mm:ss'),
               operator: item.Operator
             }
