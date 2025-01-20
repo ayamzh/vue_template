@@ -25,12 +25,12 @@ export function editReport(report) {
 }
 
 const reportTypeMap = {
-  0: '未成年人',
-  1: '作弊',
-  2: '骚扰',
-  3: '歧视',
-  4: '仇恨',
-  5: '其他'
+  0: 'Underage/未成年人',
+  1: 'Cheating/作弊',
+  2: 'Harassment/骚扰',
+  3: 'Discrimination/歧视',
+  4: 'Hateful/仇恨',
+  5: 'Something/其他'
 }
 
 
@@ -81,10 +81,10 @@ export function formatBanType(banType) {
 }
 
 const banTypeMap = {
-  0: '未成年人',
-  1: '作弊',
-  2: '骚扰',
-  3: '歧视',
-  4: '仇恨',
-  5: '其他'
+  0: 'Underage/未成年人',
+  1: 'Cheating/作弊',
+  2: 'Harassment/骚扰',
+  3: 'Discrimination/歧视',
+  4: 'Hateful/仇恨',
+  5: 'Something/其他'
 }

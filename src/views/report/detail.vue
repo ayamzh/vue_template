@@ -14,11 +14,12 @@
         <el-input v-model.number="form.uid" :disabled="true" required style="width: 30%" />
       </el-form-item>
       <el-form-item label="小黑屋到期时间">
-        <el-date-picker v-model="form.banEndtime" type="datetime" placeholder="Pick a date" style="width: 30%" />
+        <!-- 将 el-date-picker 替换为 el-input 使其只读 -->
+        <el-input v-model="form.banEndtime" readonly placeholder="Pick a date" style="width: 30%" />
       </el-form-item>
       <el-form-item label="封禁天数">
         <el-input-number v-model.number="form.banDays" :min="-9999" :max="9999" placeholder="请输入封禁天数 范围-9999~9999"
-          style="width: 30%" />
+          style="width: 30%" @change="onBanDaysChange" />
       </el-form-item>
       <el-form-item label="小黑屋类型">
         <el-select v-model="form.reportType" placeholder="请选择类型" style="width: 30%">
@@ -52,7 +53,8 @@ export default {
       },
       loading: false,
       searchLoading: false,
-      reportTypeOptions: [] // 动态获取选项
+      reportTypeOptions: [], // 动态获取选项
+      lastSubmittedBanEndtime: '' // 新增字段，保存上次提交的封禁结束时间
     }
   },
   watch: {
@@ -80,19 +82,31 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.loading = true
+      this.loading = true;
       editReport(this.form)
         .then((response) => {
-          this.loading = false
+          this.loading = false;
+          // 提交成功后，确保表单数据已更新
           this.$message({
             showClose: true,
-            message: '修改成功息',
-            type: 'success'
-          })
+            message: '修改成功',
+            type: 'success',
+          });
+
+          // 手动更新 form 的数据，确保页面数据反映最新内容
+          this.form.uid = response.data.uid;
+          this.form.banEndtime = moment.unix(response.data.banEndtimestamp).format('YYYY-MM-DD HH:mm:ss');
+          this.form.banEndtimestamp = response.data.banEndtimestamp;
+          this.form.reportType = response.data.reportType;
+
+          // 保存提交后的 banEndtime
+          this.lastSubmittedBanEndtime = this.form.banEndtime;
+          // 重置封禁天数为 0
+          this.form.banDays = 0;
         })
         .catch(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     onSearch() {
       this.searchLoading = true
@@ -103,10 +117,33 @@ export default {
           this.form.banEndtime = moment.unix(response.data.banEndtimestamp).format('YYYY-MM-DD HH:mm:ss')
           this.form.reportType = response.data.reportType
           this.searchLoading = false
+
+          // 保存提交后的 banEndtime
+          this.lastSubmittedBanEndtime = this.form.banEndtime;
+          // 重置封禁天数为 0
+          this.form.banDays = 0;
         })
         .catch(() => {
           this.searchLoading = false
         })
+    },
+    onBanDaysChange() {
+      let baseTime = moment(); // 默认为当前时间
+
+      // 如果 lastSubmittedBanEndtime 存在，并且大于当前时间，使用 lastSubmittedBanEndtime 作为基准
+      if (this.lastSubmittedBanEndtime) {
+        const submittedTime = moment(this.lastSubmittedBanEndtime);
+        if (submittedTime.isAfter(moment())) {
+          baseTime = submittedTime; // 使用 lastSubmittedBanEndtime 作为基准时间
+        }
+      } else if (this.form.banEndtime) {
+        // 如果小黑屋到期时间尚未到期，使用小黑屋到期时间为基准
+        baseTime = moment(this.form.banEndtime);
+      }
+
+      // 更新小黑屋到期时间
+      const newBanEndtime = baseTime.add(this.form.banDays, 'days').format('YYYY-MM-DD HH:mm:ss');
+      this.form.banEndtime = newBanEndtime;
     }
   }
 }
