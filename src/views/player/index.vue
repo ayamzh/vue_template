@@ -50,6 +50,9 @@
       <el-form-item label="客户端版本号">
         <el-input v-model="form.clientVer" placeholder="请输入客户端版本号" />
       </el-form-item>
+      <el-form-item label="spin次数" prop="spinTimes">
+        <el-input v-model.number="form.spinTimes" type="number" placeholder="请输入spin次数" />
+      </el-form-item>
       <el-form-item label="最后一次下注倍数">
         <el-input v-model.number="form.lastBetMultiplier" type="number" placeholder="请输入最后一次下注倍数" />
       </el-form-item>
@@ -88,6 +91,7 @@ export default {
         powerID: null,
         paidUser: false, // 付费用户
         clientVer: "",   // 客户端版本号
+        spinTimes: 0,    // spin次数
         lastBetMultiplier: 0 // 最后一次下注倍数
       },
       loading: false,
