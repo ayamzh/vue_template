@@ -36,11 +36,11 @@ const reportTypeMap = {
 
 export function formatReportType(reportType) {
   if (reportType == null) {
-    return '未成年人'
+    return 'Underage/未成年人'
   }
 
   if (isNaN(reportType)) {
-    return '未成年人'
+    return 'Underage/未成年人'
   }
 
   return reportTypeMap[reportType] || '未定义'
