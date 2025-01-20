@@ -35,12 +35,13 @@
         <el-date-picker v-model="form.loginTime" type="datetime" placeholder="Pick a date" style="width: 100%" />
       </el-form-item>
       <el-form-item label="用户自身时间">
-        <el-date-picker v-model="form.systemTime" type="datetime" placeholder="设置当前时间" style="width: 100%" />
+        <el-date-picker v-model="form.systemTime" type="datetime" placeholder="只读属性" style="width: 100%"
+          :disabled="true" />
       </el-form-item>
       <el-form-item label="时间偏移量">
-        <el-input v-model.number="form.timeOffset" type="number" placeholder="正数表示从当前时间往后推" />
+        <el-input v-model="form.timeOffset" type="text" placeholder="例如 1d3h4m5s 或 -1d3h4m5s" />
       </el-form-item>
-      <el-form-item label="PowerID">
+      <el-form-item label=" PowerID">
         <el-input v-model.number="form.powerID" type="number" placeholder="powerid" />
       </el-form-item>
       <el-form-item>
@@ -72,9 +73,9 @@ export default {
         loginCount: null,
         loginTime: null,
         loginTimestamp: null,
-        timeOffset: 0,
+        timeOffset: null,
+        timeOffsetInt: 0, // 转换后的整数（秒）
         systemTime: null,
-        systemTimestamp: null,
         powerID: null
       },
       loading: false,
@@ -85,9 +86,9 @@ export default {
     "form.loginTime": function (val) {
       this.form.loginTimestamp = moment(val).unix();
     },
-    "form.systemTime": function (val) {
-      this.form.systemTimestamp = moment(val).unix();
-    },
+    "form.timeOffset": function (val) {
+      this.updateSystemTime();
+    }
   },
   methods: {
     onSubmit() {
@@ -102,12 +103,13 @@ export default {
         return;
       }
 
+      // 在提交时确保 timeOffsetInt 是最新的
+      this.updateTimeOffsetInt(); // 更新 timeOffsetInt
+
       editPlayer(this.form)
         .then((response) => {
-          response.data.loginTime = moment(
-            response.data.loginTimestamp * 1000
-          ).format("YYYY-MM-DD HH:mm:ss");
-          this.form = response.data;
+          response.data.loginTime = moment(response.data.loginTimestamp * 1000).format("YYYY-MM-DD HH:mm:ss");
+          this.updateFormWithServerData(response.data); // 更新 form 数据
           this.loading = false;
           this.$message({
             showClose: true,
@@ -123,10 +125,8 @@ export default {
       this.searchLoading = true;
       getPlayer(this.formSearch.name)
         .then((response) => {
-          response.data.loginTime = moment(
-            response.data.loginTimestamp * 1000
-          ).format("YYYY-MM-DD HH:mm:ss")
-          this.form = response.data;
+          response.data.loginTime = moment(response.data.loginTimestamp * 1000).format("YYYY-MM-DD HH:mm:ss");
+          this.updateFormWithServerData(response.data); // 更新 form 数据并计算 timeOffsetInt
           this.searchLoading = false;
         })
         .catch(() => {
@@ -147,14 +147,12 @@ export default {
       })
         .then(() => {
           this.deleting = true;
-          // 调用删除接口（假设有 deletePlayer 方法）
           deletePlayer(this.form.uid)
             .then(() => {
               this.$message({
                 type: "success",
                 message: "用户删除成功!",
               });
-              // 清空表单
               this.form = {
                 fpID: "",
                 uid: null,
@@ -165,9 +163,9 @@ export default {
                 loginCount: null,
                 loginTime: null,
                 loginTimestamp: null,
-                timeOffset: null,
+                timeOffset: "",
+                timeOffsetInt: 0, // 重置为 0
                 systemTime: null,
-                systemTimestamp: null,
                 powerID: null,
               };
             })
@@ -184,6 +182,51 @@ export default {
         .catch(() => {
           // 用户点击取消时的处理
         });
+    },
+    // 编辑时间偏移量时，更新 systemTime 和 timeOffsetInt
+    updateSystemTime() {
+      this.updateTimeOffsetInt(); // 确保每次编辑时都更新
+    },
+    // 处理读取数据时更新 timeOffsetInt
+    updateFormWithServerData(data) {
+      // 更新 form 数据时，确保转换 timeOffset
+      this.form = data;
+      this.updateTimeOffsetInt();
+    },
+
+    // 更新 timeOffsetInt（秒数）的方法
+    updateTimeOffsetInt() {
+      const now = moment();
+      let offsetInSeconds = 0;
+
+      // 解析时间偏移量字符串（支持 1d2h3m4s 格式）
+      const regex = /([+-]?\d+)(d|h|m|s)/g;
+      let match;
+
+      while ((match = regex.exec(this.form.timeOffset)) !== null) {
+        const value = parseInt(match[1]);
+        const unit = match[2];
+
+        if (unit === 'd') {
+          offsetInSeconds += value * 86400; // 1 day = 86400 seconds
+        } else if (unit === 'h') {
+          offsetInSeconds += value * 3600; // 1 hour = 3600 seconds
+        } else if (unit === 'm') {
+          offsetInSeconds += value * 60; // 1 minute = 60 seconds
+        } else if (unit === 's') {
+          offsetInSeconds += value; // 1 second = 1 second
+        }
+      }
+
+
+
+      // 更新 systemTime 和 timeOffsetInt
+      const newTime = now.add(offsetInSeconds, 'seconds');
+      this.form.systemTime = newTime.format('YYYY-MM-DD HH:mm:ss'); // 更新 systemTime
+      this.form.timeOffsetInt = offsetInSeconds; // 更新 timeOffsetInt
+
+      console.log(newTime.format('YYYY-MM-DD HH:mm:ss'));
+      console.log(offsetInSeconds);
     }
   },
 }
