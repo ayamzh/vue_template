@@ -70,11 +70,11 @@ export function getBanUserList(formData) {
 
 export function formatBanType(banType) {
   if (banType == null) {
-    return '未成年人'
+    return 'Underage/未成年人'
   }
 
   if (isNaN(banType)) {
-    return '未成年人'
+    return 'Underage/未成年人'
   }
 
   return banTypeMap[banType] || '未定义'
