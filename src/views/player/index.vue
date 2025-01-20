@@ -41,8 +41,17 @@
       <el-form-item label="时间偏移量">
         <el-input v-model="form.timeOffset" type="text" placeholder="例如 1d3h4m5s 或 -1d3h4m5s" />
       </el-form-item>
-      <el-form-item label=" PowerID">
+      <el-form-item label="PowerID">
         <el-input v-model.number="form.powerID" type="number" placeholder="powerid" />
+      </el-form-item>
+      <el-form-item label="是否付费用户">
+        <el-switch v-model="form.paidUser" active-text="是" inactive-text="否" />
+      </el-form-item>
+      <el-form-item label="客户端版本号">
+        <el-input v-model="form.clientVer" placeholder="请输入客户端版本号" />
+      </el-form-item>
+      <el-form-item label="最后一次下注倍数">
+        <el-input v-model.number="form.lastBetMultiplier" type="number" placeholder="请输入最后一次下注倍数" />
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
@@ -76,7 +85,10 @@ export default {
         timeOffset: null,
         timeOffsetInt: 0, // 转换后的整数（秒）
         systemTime: null,
-        powerID: null
+        powerID: null,
+        paidUser: false, // 付费用户
+        clientVer: "",   // 客户端版本号
+        lastBetMultiplier: 0 // 最后一次下注倍数
       },
       loading: false,
       searchLoading: false,
