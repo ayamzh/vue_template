@@ -1,4 +1,4 @@
-te#!/bin/bash
+#!/bin/bash
 
 # 获取命令行参数 (env)
 read -p "请输入环境（env）: " env
