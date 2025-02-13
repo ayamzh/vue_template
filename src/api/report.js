@@ -47,7 +47,10 @@ export function formatReportType(reportType) {
 }
 
 export function reportTypes() {
-  return reportTypeMap
+  return {
+    0: 'Underage/未成年人',
+    5: 'Something/其他'
+  }
 }
 
 
