@@ -55,9 +55,11 @@
           </a>
         </template>
       </vxe-column>
+      <vxe-column field="nickName" title="昵称" width="200" sortable />
       <vxe-column field="banType" title="封禁类型" width="200" sortable />
       <vxe-column field="endTime" title="封禁结束日期" width="200" sortable />
       <vxe-column field="insertTime" title="操作时间" width="200" sortable />
+      <vxe-column field="reason" title="封禁描述" width="200" sortable />
       <vxe-column field="operator" title="操作者" sortable />
     </vxe-table>
 
@@ -122,7 +124,8 @@ export default {
               banType: formatBanType(item.BanType),
               insertTime: moment.unix(item.LastUpdateTime).format('YYYY-MM-DD HH:mm:ss'),
               endTime: moment.unix(item.EndTime).format('YYYY-MM-DD HH:mm:ss'),
-              operator: item.Operator
+              operator: item.Operator,
+              reason: item.Reason
             }
           })
           this.tablePage.totalResult = response.data.totalResult

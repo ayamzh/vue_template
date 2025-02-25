@@ -13,6 +13,9 @@
       <el-form-item label="Uid">
         <el-input v-model.number="form.uid" :disabled="true" required style="width: 30%" />
       </el-form-item>
+      <el-form-item label="昵称">
+        <el-input v-model="form.nickName" :disabled="true" placeholder="昵称不可编辑" style="width: 30%" />
+      </el-form-item>
       <el-form-item label="小黑屋到期时间">
         <!-- 将 el-date-picker 替换为 el-input 使其只读 -->
         <el-input v-model="form.banEndtime" readonly placeholder="Pick a date" style="width: 30%" />
@@ -26,6 +29,9 @@
           <el-option v-for="option in reportTypeOptions" :key="option.value" :label="option.label"
             :value="option.value" />
         </el-select>
+      </el-form-item>
+      <el-form-item label="封禁描述">
+        <el-input v-model="form.reason" maxlength="64" placeholder="请输入封禁描述" style="width: 30%" />
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" @click="onSubmit">提交</el-button>
@@ -47,9 +53,11 @@ export default {
       },
       form: {
         uid: null,
+        nickName: '',  // 新增字段
         banEndtime: '',
         banEndtimestamp: null,
-        reportType: null // 小黑屋类型，绑定整数值
+        reportType: null, // 小黑屋类型，绑定整数值
+        reason: '' // 新增字段，封禁描述
       },
       loading: false,
       searchLoading: false,
@@ -95,9 +103,11 @@ export default {
 
           // 手动更新 form 的数据，确保页面数据反映最新内容
           this.form.uid = response.data.uid;
+          this.form.nickName = response.data.nickName; // 更新昵称
           this.form.banEndtime = moment.unix(response.data.banEndtimestamp).format('YYYY-MM-DD HH:mm:ss');
           this.form.banEndtimestamp = response.data.banEndtimestamp;
           this.form.reportType = response.data.reportType;
+          this.form.reason = response.data.reason; // 更新封禁描述
 
           // 保存提交后的 banEndtime
           this.lastSubmittedBanEndtime = this.form.banEndtime;
@@ -113,9 +123,11 @@ export default {
       getOneReport(this.formSearch.name)
         .then((response) => {
           this.form.uid = response.data.uid
+          this.form.nickName = response.data.nickName; // 设置昵称
           this.form.banEndtimestamp = response.data.banEndtimestamp
           this.form.banEndtime = moment.unix(response.data.banEndtimestamp).format('YYYY-MM-DD HH:mm:ss')
           this.form.reportType = response.data.reportType
+          this.form.reason = response.data.reason; // 设置封禁描述
           this.searchLoading = false
 
           // 保存提交后的 banEndtime
