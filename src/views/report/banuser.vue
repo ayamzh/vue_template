@@ -125,7 +125,8 @@ export default {
               insertTime: moment.unix(item.LastUpdateTime).format('YYYY-MM-DD HH:mm:ss'),
               endTime: moment.unix(item.EndTime).format('YYYY-MM-DD HH:mm:ss'),
               operator: item.Operator,
-              reason: item.Reason
+              reason: item.Reason,
+              nickName: item.NickName
             }
           })
           this.tablePage.totalResult = response.data.totalResult
