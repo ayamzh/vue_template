@@ -150,7 +150,7 @@ export const asyncRoutes = [
     children: [
       {
         path: 'send-simple',
-        name: 'send-simple',
+        name: 'mail-send-simple',
         component: () => import('@/views/mail/send-simple'),
         meta: { title: '邮件发放', icon: 'el-icon-s-promotion' }
       }
@@ -161,7 +161,7 @@ export const asyncRoutes = [
     path: '/report',
     component: Layout,
     redirect: '/report/index',
-    name: 'Mail',
+    name: 'Report',
     meta: { title: '举报系统', icon: 'el-icon-s-promotion' },
     children: [
       {
