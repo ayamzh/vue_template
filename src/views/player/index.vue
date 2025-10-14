@@ -16,14 +16,23 @@
       <el-form-item label="Uid">
         <el-input v-model.number="form.uid" :disabled="true" required />
       </el-form-item>
-      <el-form-item label="经验值">
+      <el-form-item label="老虎机经验值">
         <el-input v-model.number="form.exp" type="number" placeholder="等级经验只需修改任意一项" />
       </el-form-item>
-      <el-form-item label="等级">
+      <el-form-item label="老虎机等级">
         <el-input v-model.number="form.level" type="number" placeholder="等级经验只需修改任意一项" />
       </el-form-item>
-      <el-form-item label="金币">
+      <el-form-item label="老虎机金币">
         <el-input v-model.number="form.coin" type="number" />
+      </el-form-item>
+      <el-form-item label="德州经验值">
+        <el-input v-model.number="form.texasExp" type="number" placeholder="德州等级经验只需修改任意一项" />
+      </el-form-item>
+      <el-form-item label="德州等级">
+        <el-input v-model.number="form.texasLevel" type="number" placeholder="德州等级经验只需修改任意一项" />
+      </el-form-item>
+      <el-form-item label="德州金币">
+        <el-input v-model.number="form.texasCoin" type="number" />
       </el-form-item>
       <el-form-item label="钻石">
         <el-input v-model.number="form.gem" type="number" />
@@ -81,6 +90,9 @@ export default {
         exp: null,
         level: null,
         coin: null,
+        texasExp: null,
+        texasLevel: null,
+        texasCoin: null,
         gem: null,
         loginCount: null,
         loginTime: null,
@@ -175,6 +187,9 @@ export default {
                 exp: null,
                 level: null,
                 coin: null,
+                texasExp: null,
+                texasLevel: null,
+                texasCoin: null,
                 gem: null,
                 loginCount: null,
                 loginTime: null,
