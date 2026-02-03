@@ -215,6 +215,12 @@ export const asyncRoutes = [
         name: 'rtpSimulator',
         component: () => import('@/views/tools/rtp-simulator'),
         meta: { title: 'RTP模拟器', icon: 'form' }
+      },
+      {
+        path: 'theme-copy',
+        name: 'theme-copy',
+        component: () => import('@/views/tools/theme-copy'),
+        meta: { title: '机台数据迁移', icon: 'form' }
       }
     ]
   },
